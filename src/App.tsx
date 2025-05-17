@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useContext } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import { AuthContext } from "./AuthContext";
 
 function App() {
-  const [count, setCount] = useState(0);
-
+  const AuthState = useContext(AuthContext);
   return (
     <>
       <div>
@@ -18,8 +18,10 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <button
+          onClick={() => AuthState.setCount((prev: number) => prev + 1)}
+        >
+          count is {AuthState.count}
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
