@@ -1,14 +1,15 @@
-import { useContext } from "react";
 import "./App.css";
-import { AuthContext } from "./AuthContext";
 import Login from "./pages/Login";
+import SignUp from "./pages/Signup";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-  const AuthState = useContext(AuthContext);
   return (
-    <>
-      <Login />
-    </>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/sign-up" element={<SignUp />} />
+    </Routes>
   );
 }
 
