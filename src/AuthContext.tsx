@@ -8,44 +8,67 @@ import {
 } from "react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
-interface ContextType {
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
+interface AuthContextType {
+  user: UserPayload | null;
+  setUser: Dispatch<SetStateAction<UserPayload | null>>;
+  isAuthenticated: boolean;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; error?: any }>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
 interface ProviderPropsType {
   children: ReactNode;
 }
 
-const AuthContext = createContext<ContextType>({
-  count: 0,
-  setCount: () => {},
-});
+interface UserPayload extends JwtPayload {
+  id: number;
+  email: string;
+  name: string;
+  profile: {
+    id: number;
+    bio: string | null;
+    imageUrl: string | null;
+    userId: number;
+  };
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider = ({ children }: ProviderPropsType) => {
-  const [user, setUser] = useState<JwtPayload | undefined>();
+  const [token, setToken] = useState(localStorage.getItem("auth_token"));
+  const [user, setUser] = useState<UserPayload | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, isLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
-      const token = localStorage.getItem("auth_token");
-      if (token) {
-        try {
-          let decoded = jwtDecode(token);
-          const isExpired = decoded.exp && Date.now() >= decoded.exp * 1000;
-          if (isExpired) {
-            const accessToken = await refreshToken();
-            decoded = jwtDecode(accessToken);
-          }
-          setUser(decoded);
-        } catch (error) {
-          console.error("Invalid token:", error);
+      if (!token) return;
+      setIsAuthenticating(true);
+      try {
+        let accessToken = token;
+        let decoded = jwtDecode<UserPayload>(accessToken);
+        const isExpired = decoded.exp && Date.now() >= decoded.exp * 1000;
+        if (isExpired) {
+          accessToken = await refreshToken();
+          setToken(accessToken);
+          decoded = jwtDecode(accessToken);
         }
+        setUser(decoded);
+        setIsAuthenticated(true);
+        localStorage.setItem("auth_token", accessToken);
+      } catch (error) {
+        console.error("Invalid token:", error);
+      } finally {
+        setIsAuthenticating(false);
       }
     };
     getUser();
-  }, []);
+  }, [token]);
 
   const refreshToken = async () => {
     try {
@@ -65,19 +88,58 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
       }
 
       const data = await response.json();
-      localStorage.setItem("auth_token", data)
-      return data;
+      return data.accessToken;
     } catch (err) {
       console.error("Error fetching data:", err);
     }
   };
 
   const login = async (email: string, password: string) => {
-    
-  }
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          response.status === 400
+            ? (await response.json()).err
+            : `HTTP error! Status: ${response.status}`
+        );
+      }
+      const data = await response.json();
+      setToken(data.accessToken);
+      return { success: true };
+    } catch (err: any) {
+      console.error(err);
+      return { success: false, error: err };
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const register = async (name: string, email: string, password: string) => {};
+
+  const logout = () => {
+    localStorage.removeItem("auth_token");
+    setToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+  };
 
   return (
-    <AuthContext.Provider value={{ count: 0, setCount: () => {} }}>
+    <AuthContext.Provider
+      value={{ user, setUser, isAuthenticated, login, logout, register }}
+    >
       {children}
     </AuthContext.Provider>
   );
