@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import Loading from "../components/Loading";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
