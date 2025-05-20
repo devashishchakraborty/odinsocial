@@ -58,12 +58,11 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
   const [user, setUser] = useState<UserPayload | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
 
   useEffect(() => {
     const getUser = async () => {
       if (!token) return;
-      setIsAuthenticating(true);
       try {
         let accessToken = token;
         let decoded = jwtDecode<UserPayload>(accessToken);
@@ -128,7 +127,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
       if (!response.ok) {
         throw new Error(
           response.status === 400
-            ? (await response.json()).err
+            ? (await response.json()).error
             : `HTTP error! Status: ${response.status}`
         );
       }
