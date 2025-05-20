@@ -1,39 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Loading from "../components/Loading";
+import { AuthContext } from "../AuthContext";
 
 const Login = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const { login, isSubmitting } = useContext(AuthContext);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          response.status === 400
-            ? (await response.json()).err
-            : `HTTP error! Status: ${response.status}`
-        );
-      }
-      const data = await response.json();
-      localStorage.setItem("auth_token", data.accessToken);
-    } catch (err: any) {
-      console.error(err);
-      setLoginError(err.message);
-    } finally {
-      setIsSubmitting(false);
+    const response = await login(email, password);
+    if (!response.success) {
+      setLoginError(response.error.message);
     }
   };
 
