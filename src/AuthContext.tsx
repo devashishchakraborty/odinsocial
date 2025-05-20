@@ -12,11 +12,17 @@ interface AuthContextType {
   user: UserPayload | null;
   setUser: Dispatch<SetStateAction<UserPayload | null>>;
   isAuthenticated: boolean;
+  isSubmitting: boolean;
+  isAuthenticating: boolean;
   login: (
     email: string,
     password: string
   ) => Promise<{ success: boolean; error?: any }>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; error?: any }>;
   logout: () => void;
 }
 
@@ -36,7 +42,16 @@ interface UserPayload extends JwtPayload {
   };
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  setUser: () => {},
+  isAuthenticated: false,
+  isSubmitting: false,
+  isAuthenticating: false,
+  login: async () => ({ success: false }),
+  register: async () => ({ success: false }),
+  logout: () => {}
+});
 
 const AuthProvider = ({ children }: ProviderPropsType) => {
   const [token, setToken] = useState(localStorage.getItem("auth_token"));
@@ -91,6 +106,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
       return data.accessToken;
     } catch (err) {
       console.error("Error fetching data:", err);
+      logout();
     }
   };
 
@@ -127,7 +143,32 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {};
+  const register = async (name: string, email: string, password: string) => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/sign-up`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      return { success: true };
+    } catch (err: any) {
+      console.error("Error:", err);
+      return { success: false, error: err };
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const logout = () => {
     localStorage.removeItem("auth_token");
@@ -138,7 +179,16 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, isAuthenticated, login, logout, register }}
+      value={{
+        user,
+        setUser,
+        isSubmitting,
+        isAuthenticating,
+        isAuthenticated,
+        login,
+        logout,
+        register,
+      }}
     >
       {children}
     </AuthContext.Provider>
