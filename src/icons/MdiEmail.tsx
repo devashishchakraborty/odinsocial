@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export default function MdiHomeOutline(props: SVGProps<SVGSVGElement>) {
+export default function MdiEmail(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +11,7 @@ export default function MdiHomeOutline(props: SVGProps<SVGSVGElement>) {
     >
       <path
         fill="currentColor"
-        d="m12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81zM12 3L2 12h3v8h6v-6h2v6h6v-8h3"
+        d="m20 8l-8 5l-8-5V6l8 5l8-5m0-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2"
       ></path>
     </svg>
   );
