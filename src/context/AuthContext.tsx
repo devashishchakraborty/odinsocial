@@ -50,7 +50,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticating: false,
   login: async () => ({ success: false }),
   register: async () => ({ success: false }),
-  logout: () => {}
+  logout: () => {},
 });
 
 const AuthProvider = ({ children }: ProviderPropsType) => {
@@ -62,7 +62,10 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
 
   useEffect(() => {
     const getUser = async () => {
-      if (!token) return;
+      if (!token) {
+        setIsAuthenticating(false);
+        return;
+      }
       try {
         let accessToken = token;
         let decoded = jwtDecode<UserPayload>(accessToken);
@@ -98,11 +101,14 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
       );
 
       if (!response.ok) {
+        if (response.status === 401) {
+          logout();
+        }
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const data = await response.json();
-      return data.accessToken;
+      return data.token;
     } catch (err) {
       console.error("Error fetching data:", err);
       logout();
@@ -174,6 +180,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
+    window.location.reload();
   };
 
   return (
