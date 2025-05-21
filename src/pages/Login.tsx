@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import Loading from "../components/Loading";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +12,9 @@ const Login = () => {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     const response = await login(email, password);
-    if (!response.success) {
+    if (response.success) {
+      window.location.reload();
+    } else {
       setLoginError(response.error.message);
     }
   };
@@ -118,12 +121,12 @@ const Login = () => {
 
             <div>
               Don't have an account?{" "}
-              <a
+              <Link
                 className="text-sky-600 hover:underline hover:text-sky-700"
-                href="/sign-up"
+                to="/sign-up"
               >
                 Sign Up
-              </a>
+              </Link>
             </div>
             <small>
               <i className="text-red-700">{loginError}</i>
