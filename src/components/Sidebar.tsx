@@ -7,7 +7,7 @@ import MdiUserOutline from "../icons/MdiUserOutline";
 import MdiSearch from "../icons/MdiSearch";
 const Sidebar = () => {
   return (
-    <section className="flex flex-col text-xl items-start">
+    <section className="flex flex-col text-xl items-start px-8">
       <Link
         to="/"
         className="flex items-center p-2 rounded-full hover:bg-gray-200"
@@ -21,19 +21,19 @@ const Sidebar = () => {
         <MdiHomeOutline className="h-8 w-8" /> Home
       </Link>
       <Link
-        to="/"
+        to="/explore"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
         <MdiSearch className="h-8 w-8" /> Explore
       </Link>
       <Link
-        to="/"
+        to="/bookmarks"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
         <MdiBookmarkOutline className="h-8 w-8" /> Bookmarks
       </Link>
       <Link
-        to="/"
+        to="/messages"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
         <MdiEmailOutline className="h-8 w-8" /> Messages
