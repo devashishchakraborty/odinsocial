@@ -24,6 +24,11 @@ interface AuthContextType {
     password: string
   ) => Promise<{ success: boolean; error?: any }>;
   logout: () => void;
+  refreshToken: () => Promise<string>;
+  decodeAndCheckExpiry: (token: string) => {
+    decoded: UserPayload;
+    isExpired: boolean | number | undefined;
+  };
 }
 
 interface ProviderPropsType {
@@ -51,10 +56,25 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => ({ success: false }),
   register: async () => ({ success: false }),
   logout: () => {},
+  refreshToken: async () => "",
+  decodeAndCheckExpiry: () => ({
+    decoded: {
+      id: 0,
+      email: "",
+      name: "",
+      profile: {
+        id: 0,
+        bio: null,
+        imageUrl: null,
+        userId: 0,
+      },
+    },
+    isExpired: false,
+  }),
 });
 
 const AuthProvider = ({ children }: ProviderPropsType) => {
-  const [token, setToken] = useState(localStorage.getItem("auth_token"));
+  // const [token, setToken] = useState(localStorage.getItem("auth_token"));
   const [user, setUser] = useState<UserPayload | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,17 +82,16 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
 
   useEffect(() => {
     const getUser = async () => {
+      let token = localStorage.getItem("auth_token");
       if (!token) {
         setIsAuthenticating(false);
         return;
       }
       try {
         let accessToken = token;
-        let decoded = jwtDecode<UserPayload>(accessToken);
-        const isExpired = decoded.exp && Date.now() >= decoded.exp * 1000;
+        let { decoded, isExpired } = decodeAndCheckExpiry(accessToken);
         if (isExpired) {
           accessToken = await refreshToken();
-          setToken(accessToken);
           decoded = jwtDecode(accessToken);
         }
         setUser(decoded);
@@ -85,7 +104,13 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
       }
     };
     getUser();
-  }, [token]);
+  }, []);
+
+  const decodeAndCheckExpiry = (token: string) => {
+    const decoded = jwtDecode<UserPayload>(token);
+    const isExpired = decoded.exp && Date.now() >= decoded.exp * 1000;
+    return { decoded, isExpired };
+  };
 
   const refreshToken = async () => {
     try {
@@ -108,7 +133,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
       }
 
       const data = await response.json();
-      return data.token;
+      return data.accessToken;
     } catch (err) {
       console.error("Error fetching data:", err);
       logout();
@@ -138,7 +163,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
         );
       }
       const data = await response.json();
-      setToken(data.accessToken);
+      localStorage.setItem("auth_token", data.accessToken);
       return { success: true };
     } catch (err: any) {
       console.error(err);
@@ -177,7 +202,6 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
 
   const logout = () => {
     localStorage.removeItem("auth_token");
-    setToken(null);
     setUser(null);
     setIsAuthenticated(false);
     window.location.reload();
@@ -194,6 +218,8 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
         login,
         logout,
         register,
+        refreshToken,
+        decodeAndCheckExpiry,
       }}
     >
       {children}
