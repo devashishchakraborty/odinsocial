@@ -5,9 +5,14 @@ import MdiBookmarkOutline from "../icons/MdiBookmarkOutline";
 import MdiEmailOutline from "../icons/MdiEmailOutline";
 import MdiUserOutline from "../icons/MdiUserOutline";
 import MdiSearch from "../icons/MdiSearch";
-const Sidebar = () => {
+import MdiHome from "../icons/MdiHome";
+import MdiSearchDarker from "../icons/MdiSearchDarker";
+import MdiBookmark from "../icons/MdiBookmark";
+import MdiEmail from "../icons/MdiEmail";
+import MdiUser from "../icons/MdiUser";
+const Sidebar = ({ selected }: { selected: string }) => {
   return (
-    <section className="flex flex-col text-xl items-start px-8">
+    <section className="flex flex-col text-xl items-start w-3xs">
       <Link
         to="/"
         className="flex items-center p-2 rounded-full hover:bg-gray-200"
@@ -18,31 +23,71 @@ const Sidebar = () => {
         to="/"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
-        <MdiHomeOutline className="h-8 w-8" /> Home
+        {selected === "home" ? (
+          <>
+            <MdiHome className="h-8 w-8" /> <b>Home</b>
+          </>
+        ) : (
+          <>
+            <MdiHomeOutline className="h-8 w-8" /> Home
+          </>
+        )}
       </Link>
       <Link
         to="/explore"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
-        <MdiSearch className="h-8 w-8" /> Explore
+        {selected === "explore" ? (
+          <>
+            <MdiSearchDarker className="h-8 w-8" /> <b>Explore</b>
+          </>
+        ) : (
+          <>
+            <MdiSearch className="h-8 w-8" /> Explore
+          </>
+        )}
       </Link>
       <Link
         to="/bookmarks"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
-        <MdiBookmarkOutline className="h-8 w-8" /> Bookmarks
+        {selected === "bookmarks" ? (
+          <>
+            <MdiBookmark className="h-8 w-8" /> <b>Bookmarks</b>
+          </>
+        ) : (
+          <>
+            <MdiBookmarkOutline className="h-8 w-8" /> Bookmarks
+          </>
+        )}
       </Link>
       <Link
         to="/messages"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
-        <MdiEmailOutline className="h-8 w-8" /> Messages
+        {selected === "messages" ? (
+          <>
+            <MdiEmail className="h-8 w-8" /> <b>Messages</b>
+          </>
+        ) : (
+          <>
+            <MdiEmailOutline className="h-8 w-8" /> Messages
+          </>
+        )}
       </Link>
       <Link
-        to="/"
+        to="/1"
         className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
       >
-        <MdiUserOutline className="h-8 w-8" /> Profile
+        {selected === "profile" ? (
+          <>
+            <MdiUser className="h-8 w-8" /> <b>Profile</b>
+          </>
+        ) : (
+          <>
+            <MdiUserOutline className="h-8 w-8" /> Profile
+          </>
+        )}
       </Link>
     </section>
   );

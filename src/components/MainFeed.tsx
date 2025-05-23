@@ -142,7 +142,6 @@ const MainFeed = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
     } catch (err: any) {
       console.error("Error fetching data:", err);
       setError(err.message);
