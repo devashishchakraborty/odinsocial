@@ -6,6 +6,10 @@ import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 import Home from "./pages/Home";
 import PageLoader from "./components/PageLoader";
+import Explore from "./pages/Explore";
+import Messages from "./pages/Messages";
+import Bookmarks from "./pages/Bookmarks";
+import Profile from "./pages/Profile";
 
 const PublicRoute = () => {
   const { isAuthenticated, isAuthenticating } = useContext(AuthContext);
@@ -39,6 +43,11 @@ function App() {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/bookmarks" element={<Bookmarks />} />
+        <Route path="/:userId" element={<Profile />} />
       </Route>
     </Routes>
   );

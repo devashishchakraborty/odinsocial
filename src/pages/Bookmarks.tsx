@@ -1,12 +1,12 @@
 import Sidebar from "../components/Sidebar";
 import MainFeed from "../components/MainFeed";
-const Home = () => {
+const Bookmarks = () => {
   return (
     <main className="px-30 flex h-full">
-      <Sidebar selected="home"/>
+      <Sidebar selected="bookmarks"/>
       <MainFeed />
     </main>
   );
 };
 
-export default Home;
+export default Bookmarks;
