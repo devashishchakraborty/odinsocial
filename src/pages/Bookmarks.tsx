@@ -2,8 +2,8 @@ import Sidebar from "../components/Sidebar";
 import MainFeed from "../components/MainFeed";
 const Bookmarks = () => {
   return (
-    <main className="px-30 flex h-full">
-      <Sidebar selected="bookmarks"/>
+    <main className="flex h-full px-30">
+      <Sidebar selected="bookmarks" />
       <MainFeed />
     </main>
   );

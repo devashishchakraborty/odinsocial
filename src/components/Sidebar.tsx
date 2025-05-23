@@ -12,16 +12,16 @@ import MdiEmail from "../icons/MdiEmail";
 import MdiUser from "../icons/MdiUser";
 const Sidebar = ({ selected }: { selected: string }) => {
   return (
-    <section className="flex flex-col text-xl items-start w-3xs">
+    <section className="flex min-w-3xs flex-col items-start text-xl">
       <Link
         to="/"
-        className="flex items-center p-2 rounded-full hover:bg-gray-200"
+        className="flex items-center rounded-full p-2 hover:bg-gray-200"
       >
         <MdiBird className="h-12 w-12 text-sky-600" />
       </Link>
       <Link
         to="/"
-        className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
+        className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
       >
         {selected === "home" ? (
           <>
@@ -35,7 +35,7 @@ const Sidebar = ({ selected }: { selected: string }) => {
       </Link>
       <Link
         to="/explore"
-        className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
+        className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
       >
         {selected === "explore" ? (
           <>
@@ -49,7 +49,7 @@ const Sidebar = ({ selected }: { selected: string }) => {
       </Link>
       <Link
         to="/bookmarks"
-        className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
+        className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
       >
         {selected === "bookmarks" ? (
           <>
@@ -63,7 +63,7 @@ const Sidebar = ({ selected }: { selected: string }) => {
       </Link>
       <Link
         to="/messages"
-        className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
+        className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
       >
         {selected === "messages" ? (
           <>
@@ -77,7 +77,7 @@ const Sidebar = ({ selected }: { selected: string }) => {
       </Link>
       <Link
         to="/1"
-        className="flex items-center gap-3 text-sky-950 py-2 px-4 hover:bg-gray-200 rounded-4xl"
+        className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
       >
         {selected === "profile" ? (
           <>

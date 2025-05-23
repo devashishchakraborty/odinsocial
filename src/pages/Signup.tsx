@@ -23,7 +23,7 @@ const SignUp = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ name, email, password }),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -41,11 +41,11 @@ const SignUp = () => {
 
   return (
     <>
-      <main className="flex flex-col p-4 text-lg sm:px-16 xl:px-32 justify-center items-center h-full">
+      <main className="flex h-full flex-col items-center justify-center p-4 text-lg sm:px-16 xl:px-32">
         <section className="flex flex-col items-center">
-          <h1 className="text-5xl font-bold text-sky-700 mb-4">OdinSocial</h1>
+          <h1 className="mb-4 text-5xl font-bold text-sky-700">OdinSocial</h1>
 
-          <h1 className="mb-4 font-bold text-gray-600 text-xl">
+          <h1 className="mb-4 text-xl font-bold text-gray-600">
             Sign up to create and share posts to your friends
           </h1>
           <form

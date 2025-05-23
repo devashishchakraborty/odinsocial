@@ -21,10 +21,10 @@ const Login = () => {
 
   return (
     <>
-      <main className="flex p-4 text-lg sm:px-16 xl:px-32 lg:gap-8 xl:gap-16 justify-center items-center h-full">
-        <section className="hidden lg:flex flex-col gap-4 text-lg">
+      <main className="flex h-full items-center justify-center p-4 text-lg sm:px-16 lg:gap-8 xl:gap-16 xl:px-32">
+        <section className="hidden flex-col gap-4 text-lg lg:flex">
           <section>
-            <h1 className="text-5xl font-bold text-sky-700 mb-8">OdinSocial</h1>
+            <h1 className="mb-8 text-5xl font-bold text-sky-700">OdinSocial</h1>
             <p>
               Connect. Share. Inspire. Your social space, built the way it
               should be.
@@ -32,46 +32,46 @@ const Login = () => {
           </section>
 
           <section>
-            <h2 className="text-3xl text-sky-700 font-bold mb-4">
+            <h2 className="mb-4 text-3xl font-bold text-sky-700">
               What You Can Do on OdinSocial
             </h2>
-            <ul className="flex flex-col gap-4 list-disc">
+            <ul className="flex list-disc flex-col gap-4">
               <li>
-                <h3 className="text-xl text-sky-700 font-bold">
+                <h3 className="text-xl font-bold text-sky-700">
                   Build Your Network
                 </h3>
                 <p>Follow friends, creators, and inspiring people.</p>
               </li>
               <li>
-                <h3 className="text-xl text-sky-700 font-bold">
+                <h3 className="text-xl font-bold text-sky-700">
                   Share Your Moments
                 </h3>
                 <p>Post photos, stories, and updates that matter to you.</p>
               </li>
               <li>
-                <h3 className="text-xl text-sky-700 font-bold">
+                <h3 className="text-xl font-bold text-sky-700">
                   Start Conversations
                 </h3>
                 <p>React, comment, and chat — express yourself fully.</p>
               </li>
               <li>
-                <h3 className="text-xl text-sky-700 font-bold">
+                <h3 className="text-xl font-bold text-sky-700">
                   Privacy First
                 </h3>
                 <p>You control your content and your experience.</p>
               </li>
               <li>
-                <h3 className="text-xl text-sky-700 font-bold">Simple & Fun</h3>
+                <h3 className="text-xl font-bold text-sky-700">Simple & Fun</h3>
                 <p>Social media that feels good to use — fast and intuitive.</p>
               </li>
             </ul>
           </section>
         </section>
         <section className="flex flex-col items-center">
-          <h1 className="hidden lg:block mb-4 text-2xl font-bold sm:text-3xl">
+          <h1 className="mb-4 hidden text-2xl font-bold sm:text-3xl lg:block">
             Sign in
           </h1>
-          <h1 className="lg:hidden text-4xl font-bold text-sky-700 mb-4">
+          <h1 className="mb-4 text-4xl font-bold text-sky-700 lg:hidden">
             OdinSocial
           </h1>
           <form
@@ -122,7 +122,7 @@ const Login = () => {
             <div>
               Don't have an account?{" "}
               <Link
-                className="text-sky-600 hover:underline hover:text-sky-700"
+                className="text-sky-600 hover:text-sky-700 hover:underline"
                 to="/sign-up"
               >
                 Sign Up

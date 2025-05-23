@@ -65,7 +65,7 @@ const MainFeed = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
             },
-          }
+          },
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -89,7 +89,7 @@ const MainFeed = () => {
     e: MouseEvent,
     postId: number,
     isLiked: string | null = null,
-    isBookmarked: string | null = null
+    isBookmarked: string | null = null,
   ) => {
     e.stopPropagation();
     const token = localStorage.getItem("auth_token");
@@ -106,12 +106,12 @@ const MainFeed = () => {
         if (post.id !== postId) return post;
 
         const updatedPost = { ...post };
-        
+
         if (isLiked === "true") {
           updatedPost.likedBy = [...post.likedBy, { id: user!.id }];
         } else if (isLiked === "false") {
           updatedPost.likedBy = post.likedBy.filter(
-            (likedBy) => likedBy.id !== user!.id
+            (likedBy) => likedBy.id !== user!.id,
           );
         }
 
@@ -119,7 +119,7 @@ const MainFeed = () => {
           updatedPost.bookmarkedBy = [...post.bookmarkedBy, { id: user!.id }];
         } else if (isBookmarked === "false") {
           updatedPost.bookmarkedBy = post.bookmarkedBy.filter(
-            (bookmarkedBy) => bookmarkedBy.id !== user!.id
+            (bookmarkedBy) => bookmarkedBy.id !== user!.id,
           );
         }
 
@@ -137,7 +137,7 @@ const MainFeed = () => {
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
           },
           body: JSON.stringify({ userId: user!.id, isLiked, isBookmarked }),
-        }
+        },
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -150,12 +150,12 @@ const MainFeed = () => {
 
   if (error) return <section>{error}</section>;
   return (
-    <section className="border-x-1 border-gray-400 w-2xl">
+    <section className="w-2xl border-x-1 border-gray-400">
       <section className="flex border-b-1 border-gray-400">
-        <div className="p-4 text-center hover:bg-gray-200 flex-1 border-r-1 border-gray-400 hover:cursor-pointer">
+        <div className="flex-1 border-r-1 border-gray-400 p-4 text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200">
           All Posts
         </div>
-        <div className="p-4 text-center hover:bg-gray-200 flex-1 hover:cursor-pointer">
+        <div className="flex-1 p-4 text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200">
           Following
         </div>
       </section>
@@ -167,7 +167,7 @@ const MainFeed = () => {
               <section
                 onClick={() => navigate(`/posts/${post.id}`)}
                 key={post.id}
-                className="flex gap-2 p-4 border-b-1 border-gray-400 hover:cursor-pointer hover:bg-gray-100"
+                className="flex gap-2 border-b-1 border-gray-400 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
               >
                 <div onClick={(e) => handleUserClick(e, post.author.id)}>
                   <img
@@ -190,15 +190,15 @@ const MainFeed = () => {
                     </div>
                     <div>{post.content}</div>
                   </div>
-                  <div className="text-gray-600 flex gap-1 items-center">
+                  <div className="flex items-center gap-1 text-gray-600">
                     {post.likedBy.some((obj) => obj.id === user!.id) ? (
                       <MdiLike
-                        className="hover:text-sky-700 h-5 w-5 text-sky-600"
+                        className="h-5 w-5 text-sky-600 hover:text-sky-700"
                         onClick={(e) => handlePostUpdate(e, post.id, "false")}
                       />
                     ) : (
                       <MdiLikeOutline
-                        className="hover:text-sky-700 h-5 w-5"
+                        className="h-5 w-5 hover:text-sky-700"
                         onClick={(e) => handlePostUpdate(e, post.id, "true")}
                       />
                     )}
@@ -206,14 +206,14 @@ const MainFeed = () => {
 
                     {post.bookmarkedBy.some((obj) => obj.id === user!.id) ? (
                       <MdiBookmark
-                        className="hover:text-sky-700 h-5 w-5 text-sky-600"
+                        className="h-5 w-5 text-sky-600 hover:text-sky-700"
                         onClick={(e) =>
                           handlePostUpdate(e, post.id, null, "false")
                         }
                       />
                     ) : (
                       <MdiBookmarkOutline
-                        className="hover:text-sky-700 h-5 w-5"
+                        className="h-5 w-5 hover:text-sky-700"
                         onClick={(e) =>
                           handlePostUpdate(e, post.id, null, "true")
                         }
