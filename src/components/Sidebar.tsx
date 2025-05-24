@@ -1,23 +1,30 @@
 import { Link } from "react-router-dom";
-import MdiBird from "../icons/MdiBird";
-import MdiHomeOutline from "../icons/MdiHomeOutline";
-import MdiBookmarkOutline from "../icons/MdiBookmarkOutline";
-import MdiEmailOutline from "../icons/MdiEmailOutline";
-import MdiUserOutline from "../icons/MdiUserOutline";
-import MdiSearch from "../icons/MdiSearch";
-import MdiHome from "../icons/MdiHome";
-import MdiSearchDarker from "../icons/MdiSearchDarker";
-import MdiBookmark from "../icons/MdiBookmark";
-import MdiEmail from "../icons/MdiEmail";
-import MdiUser from "../icons/MdiUser";
+
+import {
+  HomeIcon as HomeIconOutline,
+  MagnifyingGlassCircleIcon as ExploreIconOutline,
+  BookmarkIcon as BookmarkIconOutline,
+  EnvelopeIcon as MessagesIconOutline,
+  UserCircleIcon as ProfileIconOutline,
+  BellIcon as NotificationIconOutline,
+} from "@heroicons/react/24/outline";
+import {
+  HomeIcon,
+  MagnifyingGlassCircleIcon as ExploreIcon,
+  BookmarkIcon,
+  EnvelopeIcon as MessagesIcon,
+  UserCircleIcon as ProfileIcon,
+  BellIcon as NotificationIcon,
+} from "@heroicons/react/24/solid";
+
 const Sidebar = ({ selected }: { selected: string }) => {
   return (
     <section className="flex min-w-3xs flex-col items-start text-xl">
       <Link
         to="/"
-        className="flex items-center rounded-full p-2 hover:bg-gray-200"
+        className="flex items-center p-4 font-['Cinzel'] text-2xl font-black text-sky-800"
       >
-        <MdiBird className="h-12 w-12 text-sky-600" />
+        OdinSocial
       </Link>
       <Link
         to="/"
@@ -25,11 +32,11 @@ const Sidebar = ({ selected }: { selected: string }) => {
       >
         {selected === "home" ? (
           <>
-            <MdiHome className="h-8 w-8" /> <b>Home</b>
+            <HomeIcon className="h-8 w-8" /> <b>Home</b>
           </>
         ) : (
           <>
-            <MdiHomeOutline className="h-8 w-8" /> Home
+            <HomeIconOutline className="h-8 w-8" /> Home
           </>
         )}
       </Link>
@@ -39,11 +46,25 @@ const Sidebar = ({ selected }: { selected: string }) => {
       >
         {selected === "explore" ? (
           <>
-            <MdiSearchDarker className="h-8 w-8" /> <b>Explore</b>
+            <ExploreIcon className="h-8 w-8" /> <b>Explore</b>
           </>
         ) : (
           <>
-            <MdiSearch className="h-8 w-8" /> Explore
+            <ExploreIconOutline className="h-8 w-8" /> Explore
+          </>
+        )}
+      </Link>
+      <Link
+        to="/notifications"
+        className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
+      >
+        {selected === "notifications" ? (
+          <>
+            <NotificationIcon className="h-8 w-8" /> <b>Notifications</b>
+          </>
+        ) : (
+          <>
+            <NotificationIconOutline className="h-8 w-8" /> Notifications
           </>
         )}
       </Link>
@@ -53,11 +74,11 @@ const Sidebar = ({ selected }: { selected: string }) => {
       >
         {selected === "bookmarks" ? (
           <>
-            <MdiBookmark className="h-8 w-8" /> <b>Bookmarks</b>
+            <BookmarkIcon className="h-8 w-8" /> <b>Bookmarks</b>
           </>
         ) : (
           <>
-            <MdiBookmarkOutline className="h-8 w-8" /> Bookmarks
+            <BookmarkIconOutline className="h-8 w-8" /> Bookmarks
           </>
         )}
       </Link>
@@ -67,11 +88,11 @@ const Sidebar = ({ selected }: { selected: string }) => {
       >
         {selected === "messages" ? (
           <>
-            <MdiEmail className="h-8 w-8" /> <b>Messages</b>
+            <MessagesIcon className="h-8 w-8" /> <b>Messages</b>
           </>
         ) : (
           <>
-            <MdiEmailOutline className="h-8 w-8" /> Messages
+            <MessagesIconOutline className="h-8 w-8" /> Messages
           </>
         )}
       </Link>
@@ -81,11 +102,11 @@ const Sidebar = ({ selected }: { selected: string }) => {
       >
         {selected === "profile" ? (
           <>
-            <MdiUser className="h-8 w-8" /> <b>Profile</b>
+            <ProfileIcon className="h-8 w-8" /> <b>Profile</b>
           </>
         ) : (
           <>
-            <MdiUserOutline className="h-8 w-8" /> Profile
+            <ProfileIconOutline className="h-8 w-8" /> Profile
           </>
         )}
       </Link>

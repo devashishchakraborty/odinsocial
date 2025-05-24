@@ -24,7 +24,7 @@ const Login = () => {
       <main className="flex h-full items-center justify-center p-4 text-lg sm:px-16 lg:gap-8 xl:gap-16 xl:px-32">
         <section className="hidden flex-col gap-4 text-lg lg:flex">
           <section>
-            <h1 className="mb-8 text-5xl font-bold text-sky-700">OdinSocial</h1>
+            <h1 className="mb-8 text-5xl font-bold text-sky-800 font-['Cinzel']">OdinSocial</h1>
             <p>
               Connect. Share. Inspire. Your social space, built the way it
               should be.
@@ -71,7 +71,7 @@ const Login = () => {
           <h1 className="mb-4 hidden text-2xl font-bold sm:text-3xl lg:block">
             Sign in
           </h1>
-          <h1 className="mb-4 text-4xl font-bold text-sky-700 lg:hidden">
+          <h1 className="mb-4 text-4xl font-bold text-sky-800 lg:hidden font-['Cinzel']">
             OdinSocial
           </h1>
           <form

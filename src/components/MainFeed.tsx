@@ -4,10 +4,12 @@ import defaultPicture from "../assets/defaultPicture.png";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "./PageLoader";
 import { getTimeDifference } from "../utils/Utils";
-import MdiLikeOutline from "../icons/MdiLikeOutline";
-import MdiLike from "../icons/MdiLike";
-import MdiBookmarkOutline from "../icons/MdiBookmarkOutline";
-import MdiBookmark from "../icons/MdiBookmark";
+import { BookmarkIcon, HandThumbUpIcon as LikeIcon } from "@heroicons/react/24/solid";
+import {
+  HandThumbUpIcon as LikeIconOutline,
+  BookmarkIcon as BookmarkIconOutline,
+  ChatBubbleOvalLeftIcon as CommentIcon,
+} from "@heroicons/react/24/outline";
 
 type User = {
   id: number;
@@ -161,7 +163,7 @@ const MainFeed = () => {
               <section
                 onClick={() => navigate(`/posts/${post.id}`)}
                 key={post.id}
-                className="flex gap-2 border-b-1 border-gray-400 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                className="flex gap-2 border-b-1 border-gray-400 px-4 py-2 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
               >
                 <div onClick={(e) => handleUserClick(e, post.author.id)}>
                   <img
@@ -170,8 +172,8 @@ const MainFeed = () => {
                     className="h-10 w-10 min-w-max"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <div>
+                <div className="flex flex-1 flex-col gap-2">
+                  <div className="flex flex-col items-start">
                     <div
                       className="flex gap-1"
                       onClick={(e) => handleUserClick(e, post.author.id)}
@@ -184,29 +186,45 @@ const MainFeed = () => {
                     </div>
                     <div>{post.content}</div>
                   </div>
-                  <div className="flex items-center gap-1 text-gray-600">
-                    {post.likedBy.some((obj) => obj.id === user!.id) ? (
-                      <MdiLike
-                        className="h-5 w-5 text-sky-600 hover:text-sky-700"
-                        onClick={(e) => handlePostUpdate(e, post.id, "false")}
-                      />
-                    ) : (
-                      <MdiLikeOutline
-                        className="h-5 w-5 hover:text-sky-700"
-                        onClick={(e) => handlePostUpdate(e, post.id, "true")}
-                      />
-                    )}
-                    {post.likedBy.length}
+
+                  <div className="flex items-center justify-between text-gray-600">
+                    <div className="flex items-center gap-20">
+                      <div className="flex items-center gap-1 hover:text-sky-700" title="Like">
+                        {post.likedBy.some((obj) => obj.id === user!.id) ? (
+                          <LikeIcon
+                            className="h-5 w-5 text-sky-600"
+                            onClick={(e) =>
+                              handlePostUpdate(e, post.id, "false")
+                            }
+                          />
+                        ) : (
+                          <LikeIconOutline
+                            className="h-5 w-5"
+                            onClick={(e) =>
+                              handlePostUpdate(e, post.id, "true")
+                            }
+                          />
+                        )}
+                        {post.likedBy.length}
+                      </div>
+                      <div className="flex items-center gap-1 hover:text-green-700" title="Comment">
+                        <CommentIcon
+                          className="h-5 w-5"
+                          onClick={(e) => handlePostUpdate(e, post.id)}
+                        />
+                        {post.comments.length}
+                      </div>
+                    </div>
 
                     {post.bookmarkedBy.some((obj) => obj.id === user!.id) ? (
-                      <MdiBookmark
+                      <BookmarkIcon
                         className="h-5 w-5 text-sky-600 hover:text-sky-700"
                         onClick={(e) =>
                           handlePostUpdate(e, post.id, null, "false")
                         }
                       />
                     ) : (
-                      <MdiBookmarkOutline
+                      <BookmarkIconOutline
                         className="h-5 w-5 hover:text-sky-700"
                         onClick={(e) =>
                           handlePostUpdate(e, post.id, null, "true")
