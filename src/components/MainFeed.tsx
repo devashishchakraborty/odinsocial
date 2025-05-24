@@ -30,13 +30,7 @@ type Post = {
   published: true;
   author: User;
   authorId: number;
-  parentPostId: number | null;
-  parentPost: Post | null;
-  replies: Post[];
-  RootPostId: number | null;
-  RootPost: Post | null;
-  thread: Post[];
-  isThread: boolean;
+  comments: { id: number }[];
   bookmarkedBy: { id: number }[];
 };
 
