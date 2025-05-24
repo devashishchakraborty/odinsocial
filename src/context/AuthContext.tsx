@@ -7,6 +7,9 @@ import {
   useState,
 } from "react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { User } from "../types";
+
+interface UserPayload extends User, JwtPayload {}
 
 interface AuthContextType {
   user: UserPayload | null;
@@ -16,12 +19,12 @@ interface AuthContextType {
   isAuthenticating: boolean;
   login: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; error?: any }>;
   register: (
     name: string,
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; error?: any }>;
   logout: () => void;
   refreshToken: () => Promise<string>;
@@ -33,18 +36,6 @@ interface AuthContextType {
 
 interface ProviderPropsType {
   children: ReactNode;
-}
-
-interface UserPayload extends JwtPayload {
-  id: number;
-  email: string;
-  name: string;
-  profile: {
-    id: number;
-    bio: string | null;
-    imageUrl: string | null;
-    userId: number;
-  };
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -122,7 +113,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -152,14 +143,14 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
           },
           credentials: "include",
           body: JSON.stringify({ email, password }),
-        }
+        },
       );
 
       if (!response.ok) {
         throw new Error(
           response.status === 400
             ? (await response.json()).error
-            : `HTTP error! Status: ${response.status}`
+            : `HTTP error! Status: ${response.status}`,
         );
       }
       const data = await response.json();
@@ -184,7 +175,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ name, email, password }),
-        }
+        },
       );
 
       if (!response.ok) {

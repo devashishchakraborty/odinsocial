@@ -4,37 +4,18 @@ import defaultPicture from "../assets/defaultPicture.png";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "./PageLoader";
 import { getTimeDifference } from "../utils/Utils";
-import { BookmarkIcon, HandThumbUpIcon as LikeIcon } from "@heroicons/react/24/solid";
+import { Post } from "../types";
+import {
+  BookmarkIcon,
+  HandThumbUpIcon as LikeIcon,
+} from "@heroicons/react/24/solid";
 import {
   HandThumbUpIcon as LikeIconOutline,
   BookmarkIcon as BookmarkIconOutline,
   ChatBubbleOvalLeftIcon as CommentIcon,
+  ArrowPathRoundedSquareIcon as RepostIcon,
 } from "@heroicons/react/24/outline";
 
-type User = {
-  id: number;
-  email: string;
-  name: string;
-  profile: {
-    id: number;
-    bio: string | null;
-    imageUrl: string | null;
-    userId: number;
-  };
-};
-
-type Post = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  content: string;
-  likedBy: { id: number }[];
-  published: true;
-  author: User;
-  authorId: number;
-  comments: { id: number }[];
-  bookmarkedBy: { id: number }[];
-};
 
 const MainFeed = () => {
   const [posts, setPosts] = useState<Post[]>();
@@ -188,11 +169,14 @@ const MainFeed = () => {
                   </div>
 
                   <div className="flex items-center justify-between text-gray-600">
-                    <div className="flex items-center gap-20">
-                      <div className="flex items-center gap-1 hover:text-sky-700" title="Like">
+                    <div className="flex w-sm items-center justify-between gap-10">
+                      <div
+                        className="flex items-center gap-1 hover:text-pink-700"
+                        title="Like"
+                      >
                         {post.likedBy.some((obj) => obj.id === user!.id) ? (
                           <LikeIcon
-                            className="h-5 w-5 text-sky-600"
+                            className="h-5 w-5 text-pink-600"
                             onClick={(e) =>
                               handlePostUpdate(e, post.id, "false")
                             }
@@ -207,8 +191,22 @@ const MainFeed = () => {
                         )}
                         {post.likedBy.length}
                       </div>
-                      <div className="flex items-center gap-1 hover:text-green-700" title="Comment">
+
+                      <div
+                        className="flex items-center gap-1 hover:text-sky-700"
+                        title="Comment"
+                      >
                         <CommentIcon
+                          className="h-5 w-5"
+                          onClick={(e) => handlePostUpdate(e, post.id)}
+                        />
+                        {post.comments.length}
+                      </div>
+                      <div
+                        className="flex items-center gap-1 hover:text-green-700"
+                        title="Repost"
+                      >
+                        <RepostIcon
                           className="h-5 w-5"
                           onClick={(e) => handlePostUpdate(e, post.id)}
                         />

@@ -17,7 +17,7 @@ import {
   BellIcon as NotificationIcon,
 } from "@heroicons/react/24/solid";
 
-const Sidebar = ({ selected }: { selected: string }) => {
+const Sidebar = ({ selected }: {selected: string | null}) => {
   return (
     <section className="flex min-w-3xs flex-col items-start text-xl">
       <Link
