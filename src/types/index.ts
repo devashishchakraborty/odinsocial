@@ -8,7 +8,11 @@ export interface User {
     imageUrl: string | null;
     userId: number;
   };
-};
+  _count?: {
+    followers: number;
+    following: number;
+  };
+}
 
 export interface Post {
   id: number;
@@ -21,5 +25,4 @@ export interface Post {
   authorId: number;
   comments: { id: number }[];
   bookmarkedBy: { id: number }[];
-};
-
+}
