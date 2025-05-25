@@ -1,10 +1,10 @@
 import Sidebar from "../components/Sidebar";
-import MainFeed from "../components/MainFeed";
+import PostFeed from "../components/PostFeed";
 const Bookmarks = () => {
   return (
     <main className="flex h-full px-30">
       <Sidebar selected="bookmarks" />
-      <MainFeed />
+      <PostFeed />
     </main>
   );
 };

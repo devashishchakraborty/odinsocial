@@ -16,7 +16,7 @@ import {
   ArrowPathRoundedSquareIcon as RepostIcon,
 } from "@heroicons/react/24/outline";
 
-const MainFeed = () => {
+const PostFeed = () => {
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [error, setError] = useState(null);
   const [showFollowingPosts, setShowFollowingPosts] = useState(false);
@@ -61,7 +61,7 @@ const MainFeed = () => {
 
   const handleUserClick = (e: MouseEvent, authorId: number) => {
     e.stopPropagation(); // Prevent parent <Link> navigation
-    navigate(`/profile/${authorId}`);
+    navigate(`/${authorId}`);
   };
 
   const handlePostUpdate = async (
@@ -80,6 +80,7 @@ const MainFeed = () => {
       localStorage.setItem("auth_token", token);
     }
 
+    // Optimistic UI changes 
     setPosts((posts) => {
       return posts!.map((post) => {
         if (post.id !== postId) return post;
@@ -261,4 +262,4 @@ const MainFeed = () => {
   );
 };
 
-export default MainFeed;
+export default PostFeed;
