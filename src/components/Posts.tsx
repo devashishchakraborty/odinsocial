@@ -28,8 +28,6 @@ const Posts = ({
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  if (error) return <section>{error}</section>;
-
   useEffect(() => {
     const fetchPosts = async () => {
       setPosts(null);
@@ -43,20 +41,20 @@ const Posts = ({
       }
 
       try {
-        let url: string;
-        if (userId) {
-          url = `${import.meta.env.VITE_API_BASE_URL}/posts?userId=${userId}`;
-        } else {
-          url = `${import.meta.env.VITE_APT_BASE_URL}/posts?following=${showFollowingPosts}`;
-        }
+        const filter: string = userId
+          ? `userId=${userId}`
+          : `following=${showFollowingPosts}`;
 
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/posts?${filter}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            },
           },
-        });
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -139,6 +137,8 @@ const Posts = ({
     }
   };
 
+  if (error) return <section>{error}</section>;
+
   return (
     <section className="flex flex-col">
       {posts ? (
@@ -156,7 +156,7 @@ const Posts = ({
                 <div onClick={(e) => handleUserClick(e, post.author.id)}>
                   <img
                     src={post.author.profile.imageUrl || defaultPicture}
-                    alt="default profile"
+                    alt="profile picture"
                     className="h-10 w-10 min-w-max"
                   />
                 </div>
