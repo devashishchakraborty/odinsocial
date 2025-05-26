@@ -2,7 +2,7 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  createdAt?: string; 
+  createdAt?: Date;
   profile: {
     id: number;
     bio: string | null;
@@ -26,4 +26,23 @@ export interface Post {
   authorId: number;
   comments: { id: number }[];
   bookmarkedBy: { id: number }[];
+}
+
+export interface Comment {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  text: string;
+  post?: Post;
+  postId: number;
+  replies?: Reply[];
+}
+
+export interface Reply {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  text: string;
+  comment?: Comment;
+  commentId: number;
 }
