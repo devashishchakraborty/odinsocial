@@ -12,29 +12,19 @@ import { convertTimestampToDate } from "../utils/Utils";
 const Profile = () => {
   const [_user, _setUser] = useState<User | null>(null); // User Profile I'm gonna view
   const [error, setError] = useState(null);
-  const { decodeAndCheckExpiry, refreshToken, user } = useContext(AuthContext);
+  const { getAuthHeaders, user } = useContext(AuthContext);
   const { userId } = useParams();
   useEffect(() => {
     const fetchUser = async () => {
       _setUser(null);
-      const token = localStorage.getItem("auth_token");
-      if (!token) return;
-
-      const { isExpired } = decodeAndCheckExpiry(token);
-      if (isExpired) {
-        const token = await refreshToken();
-        localStorage.setItem("auth_token", token);
-      }
 
       try {
+        const headers = await getAuthHeaders();
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/users/${userId}`,
           {
             method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            },
+            headers: headers,
           },
         );
         if (!response.ok) {

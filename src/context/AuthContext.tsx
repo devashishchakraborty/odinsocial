@@ -27,11 +27,7 @@ interface AuthContextType {
     password: string,
   ) => Promise<{ success: boolean; error?: any }>;
   logout: () => void;
-  refreshToken: () => Promise<string>;
-  decodeAndCheckExpiry: (token: string) => {
-    decoded: UserPayload;
-    isExpired: boolean | number | undefined;
-  };
+  getAuthHeaders: () => Promise<{}>;
 }
 
 interface ProviderPropsType {
@@ -47,21 +43,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => ({ success: false }),
   register: async () => ({ success: false }),
   logout: () => {},
-  refreshToken: async () => "",
-  decodeAndCheckExpiry: () => ({
-    decoded: {
-      id: 0,
-      email: "",
-      name: "",
-      profile: {
-        id: 0,
-        bio: null,
-        imageUrl: null,
-        userId: 0,
-      },
-    },
-    isExpired: false,
-  }),
+  getAuthHeaders: async () => ({}),
 });
 
 const AuthProvider = ({ children }: ProviderPropsType) => {
@@ -101,6 +83,22 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
     const decoded = jwtDecode<UserPayload>(token);
     const isExpired = decoded.exp && Date.now() >= decoded.exp * 1000;
     return { decoded, isExpired };
+  };
+
+  const getAuthHeaders = async () => {
+    let token = localStorage.getItem("auth_token");
+    if (!token) return {};
+
+    const { isExpired } = decodeAndCheckExpiry(token);
+    if (isExpired) {
+      token = await refreshToken();
+      if (token) localStorage.setItem("auth_token", token);
+    }
+
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
   };
 
   const refreshToken = async () => {
@@ -209,8 +207,7 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
         login,
         logout,
         register,
-        refreshToken,
-        decodeAndCheckExpiry,
+        getAuthHeaders,
       }}
     >
       {children}

@@ -1,14 +1,11 @@
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import defaultPicture from "../assets/defaultPicture.png";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "./PageLoader";
 import { getTimeDifference } from "../utils/Utils";
 import { Post } from "../types";
-import {
-  BookmarkIcon,
-  HeartIcon as LikeIcon,
-} from "@heroicons/react/24/solid";
+import { BookmarkIcon, HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
 import {
   HeartIcon as LikeIconOutline,
   BookmarkIcon as BookmarkIconOutline,
@@ -19,40 +16,48 @@ import {
 const Posts = ({
   showFollowingPosts,
   userId,
+  showBookmarks,
+  searchQuery,
 }: {
   showFollowingPosts?: boolean;
   userId?: number;
+  showBookmarks?: boolean;
+  searchQuery?: string;
 }) => {
-  const [posts, setPosts] = useState<Post[] | null>(null);
-  const { decodeAndCheckExpiry, refreshToken, user } = useContext(AuthContext);
+  const { getAuthHeaders, user } = useContext(AuthContext);
+  const [posts, setPosts] = useState<Post[] | []>([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const filteredPosts = useMemo(() => {
+    if (searchQuery && showBookmarks) {
+      return posts.filter((post) =>
+        post.content.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    }
+    return posts;
+  }, [posts, searchQuery, showBookmarks]);
+
   useEffect(() => {
     const fetchPosts = async () => {
-      setPosts(null);
-      const token = localStorage.getItem("auth_token");
-      if (!token) return;
-
-      const { isExpired } = decodeAndCheckExpiry(token);
-      if (isExpired) {
-        const token = await refreshToken();
-        localStorage.setItem("auth_token", token);
-      }
+      setPosts([]);
 
       try {
+        // Applying different filters based on the page user has opened
         const filter: string = userId
           ? `userId=${userId}`
-          : `following=${showFollowingPosts}`;
+          : showBookmarks
+            ? `showBookmarks=${showBookmarks}`
+            : showFollowingPosts
+              ? `following=${showFollowingPosts}`
+              : "";
 
+        const headers = await getAuthHeaders();
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/posts?${filter}`,
           {
             method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            },
+            headers: headers,
           },
         );
         if (!response.ok) {
@@ -80,14 +85,6 @@ const Posts = ({
     isBookmarked: string | null = null,
   ) => {
     e.stopPropagation();
-    const token = localStorage.getItem("auth_token");
-    if (!token) return;
-
-    const { isExpired } = decodeAndCheckExpiry(token);
-    if (isExpired) {
-      const token = await refreshToken();
-      localStorage.setItem("auth_token", token);
-    }
 
     // Optimistic UI changes
     setPosts((posts) => {
@@ -117,14 +114,12 @@ const Posts = ({
     });
 
     try {
+      const headers = await getAuthHeaders();
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          },
+          headers: headers,
           body: JSON.stringify({ userId: user!.id, isLiked, isBookmarked }),
         },
       );
@@ -141,11 +136,11 @@ const Posts = ({
 
   return (
     <section className="flex flex-col">
-      {posts ? (
-        posts.length === 0 ? (
+      {filteredPosts ? (
+        filteredPosts.length === 0 ? (
           <div className="p-4 text-center">No Posts Found!</div>
         ) : (
-          posts.map((post: Post) => {
+          filteredPosts.map((post: Post) => {
             const diff = getTimeDifference(post.createdAt);
             return (
               <section
