@@ -2,6 +2,7 @@ export interface User {
   id: number;
   email: string;
   name: string;
+  createdAt?: string; 
   profile: {
     id: number;
     bio: string | null;

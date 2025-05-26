@@ -25,4 +25,13 @@ const getTimeDifference = (time: Date) => {
   return diff;
 };
 
-export { getTimeDifference };
+const convertTimestampToDate = (timestamp: string) => {
+  const date = new Date(timestamp);
+  const formatted = date.toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+  return formatted;
+}
+
+export { getTimeDifference, convertTimestampToDate };
