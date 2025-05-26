@@ -16,15 +16,16 @@ import {
   UserCircleIcon as ProfileIcon,
   BellIcon as NotificationIcon,
 } from "@heroicons/react/24/solid";
+import Fa6SolidDragon from "../assets/OdinSocial";
 
 const Sidebar = ({ selected }: {selected: string | null}) => {
   return (
     <section className="flex min-w-3xs flex-col items-start text-xl">
       <Link
         to="/"
-        className="flex items-center p-4 font-['Cinzel'] text-2xl font-black text-sky-800"
+        className="flex items-center p-4 font-['Cinzel'] text-2xl font-black text-sky-800 gap-2"
       >
-        OdinSocial
+        <Fa6SolidDragon className="h-8 w-8"/>OdinSocial
       </Link>
       <Link
         to="/"

@@ -61,16 +61,16 @@ const Profile = () => {
               <div>
                 <div className="flex h-15 justify-between">
                   <div>
-                    <div className="relative bottom-20 rounded-full border-4 border-sky-900">
+                    <div className="relative bottom-20 rounded-full border-4 border-white bg-white">
                       <img
                         src={user.profile.imageUrl || defaultPicture}
                         alt="profile picture"
-                        className="h-30 min-w-max"
+                        className="h-30 w-30 min-w-max rounded-full"
                       />
                     </div>
                   </div>
                   <div>
-                    <button className="font-bold px-4 py-2 bg-sky-900 text-white rounded-3xl">Follow</button>
+                    <button className="font-bold px-4 py-2 bg-sky-600 text-white rounded-3xl cursor-pointer hover:bg-sky-700">Follow</button>
                   </div>
                 </div>
                 <div>

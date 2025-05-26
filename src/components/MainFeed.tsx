@@ -13,7 +13,7 @@ const MainFeed = () => {
         >
           All Posts
           {showFollowingPosts || (
-            <div className="absolute bottom-1 left-1/2 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
+            <div className="absolute bottom-0.5 left-1/2 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
           )}
         </div>
         <div
@@ -22,7 +22,7 @@ const MainFeed = () => {
         >
           Following
           {showFollowingPosts && (
-            <div className="absolute bottom-1 left-1/2 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
+            <div className="absolute bottom-0.5 left-1/2 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
           )}
         </div>
       </section>

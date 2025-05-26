@@ -7,10 +7,10 @@ import { getTimeDifference } from "../utils/Utils";
 import { Post } from "../types";
 import {
   BookmarkIcon,
-  HandThumbUpIcon as LikeIcon,
+  HeartIcon as LikeIcon,
 } from "@heroicons/react/24/solid";
 import {
-  HandThumbUpIcon as LikeIconOutline,
+  HeartIcon as LikeIconOutline,
   BookmarkIcon as BookmarkIconOutline,
   ChatBubbleOvalLeftIcon as CommentIcon,
   ArrowPathRoundedSquareIcon as RepostIcon,
@@ -157,7 +157,7 @@ const Posts = ({
                   <img
                     src={post.author.profile.imageUrl || defaultPicture}
                     alt="profile picture"
-                    className="h-10 w-10 min-w-max"
+                    className="h-10 w-10 min-w-max rounded-full"
                   />
                 </div>
                 <div className="flex flex-1 flex-col gap-2">
