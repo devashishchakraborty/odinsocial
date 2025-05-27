@@ -25,12 +25,12 @@ const Posts = ({
   searchQuery?: string;
 }) => {
   const { getAuthHeaders, user } = useContext(AuthContext);
-  const [posts, setPosts] = useState<Post[] | []>([]);
+  const [posts, setPosts] = useState<Post[] | null>(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const filteredPosts = useMemo(() => {
-    if (searchQuery && showBookmarks) {
+    if (searchQuery && showBookmarks && posts) {
       return posts.filter((post) =>
         post.content.toLowerCase().includes(searchQuery.toLowerCase()),
       );
@@ -40,7 +40,7 @@ const Posts = ({
 
   useEffect(() => {
     const fetchPosts = async () => {
-      setPosts([]);
+      setPosts(null);
 
       try {
         // Applying different filters based on the page user has opened
@@ -120,7 +120,7 @@ const Posts = ({
         {
           method: "PUT",
           headers: headers,
-          body: JSON.stringify({ userId: user!.id, isLiked, isBookmarked }),
+          body: JSON.stringify({ isLiked, isBookmarked }),
         },
       );
       if (!response.ok) {
@@ -164,8 +164,8 @@ const Posts = ({
                       <div className="font-bold hover:underline">
                         {post.author.name}
                       </div>
-                      ·<div className="text-gray-800">{post.author.email}</div>·
-                      <div className="text-gray-800">{diff}</div>
+                      ·<div className="text-gray-600">{post.author.email}</div>·
+                      <div className="text-gray-600">{diff}</div>
                     </div>
                     <div>{post.content}</div>
                   </div>

@@ -24,7 +24,7 @@ export interface Post {
   published: true;
   author: User;
   authorId: number;
-  comments: { id: number }[];
+  comments: Comment[];
   bookmarkedBy: { id: number }[];
 }
 
