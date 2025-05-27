@@ -25,7 +25,7 @@ const getTimeDifference = (time: Date) => {
   return diff;
 };
 
-const convertTimestampToDate = (timestamp: string) => {
+const convertTimestampToDate = (timestamp: Date) => {
   const date = new Date(timestamp);
   const formatted = date.toLocaleString("en-US", {
     month: "long",
@@ -34,4 +34,20 @@ const convertTimestampToDate = (timestamp: string) => {
   return formatted;
 }
 
-export { getTimeDifference, convertTimestampToDate };
+const formatDate = (_date: Date) => {
+  const date = new Date(_date);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+  const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two digits
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = monthNames[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  return `${formattedHours}:${formattedMinutes} ${ampm} · ${month} ${day}, ${year}`;
+}
+
+export { getTimeDifference, convertTimestampToDate, formatDate };
