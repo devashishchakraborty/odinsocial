@@ -20,6 +20,7 @@ const Post = () => {
   const [post, setPost] = useState<PostType | null>(null);
   const { user, getAuthHeaders } = useContext(AuthContext);
   const [error, setError] = useState(null);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -106,87 +107,120 @@ const Post = () => {
           Post
         </div>
 
-        <section className="border-b-1 border-gray-400 p-4">
+        <section className="flex flex-col gap-4 border-b-1 border-gray-400 p-4">
           {post ? (
-            <section className="flex gap-2">
-              <div className="flex flex-1 flex-col gap-4">
-                <div className="flex gap-2 items-center">
-                  <Link to={`/${post.authorId}`}>
-                    <img
-                      src={post.author.profile.imageUrl || defaultPicture}
-                      alt="profile picture"
-                      className="h-10 w-10 min-w-max rounded-full"
-                    />
-                  </Link>
-                  <div className="flex flex-col items-start gap-2">
-                    <Link
-                      to={`${post.authorId}`}
-                      className="flex flex-col leading-[1.2]"
-                    >
-                      <div className="font-bold hover:underline">
-                        {post.author.name}
-                      </div>
-                      <div className="text-gray-600">{post.author.email}</div>
+            <>
+              <section className="flex gap-2">
+                <div className="flex flex-1 flex-col gap-4">
+                  <div className="flex items-center gap-2">
+                    <Link to={`/${post.authorId}`}>
+                      <img
+                        src={post.author.profile.imageUrl || defaultPicture}
+                        alt="profile picture"
+                        className="h-10 w-10 min-w-max rounded-full"
+                      />
                     </Link>
-                  </div>
-                </div>
-                <div className="text-lg">{post.content}</div>
-                <Link to={`/posts/${post.id}`} className="text-gray-600 hover:underline">{formatDate(post.createdAt)}</Link>
-
-                <div className="flex items-center justify-between gap-2 border-y-1 border-gray-400 px-1 py-2 text-gray-600">
-                  <div className="flex w-full items-center justify-between select-none">
-                    <div
-                      className="flex cursor-pointer items-center gap-1 hover:text-pink-700"
-                      title="Like"
-                    >
-                      {post.likedBy.some((obj) => obj.id === user!.id) ? (
-                        <LikeIcon
-                          className="h-6 w-6 text-pink-600"
-                          onClick={() => handlePostUpdate("false")}
-                        />
-                      ) : (
-                        <LikeIconOutline
-                          className="h-6 w-6"
-                          onClick={() => handlePostUpdate("true")}
-                        />
-                      )}
-                      {post.likedBy.length}
-                    </div>
-
-                    <div
-                      className="flex cursor-pointer items-center gap-1 hover:text-sky-700"
-                      title="Comment"
-                    >
-                      <CommentIcon className="h-6 w-6" />
-                      {post.comments.length}
-                    </div>
-                    <div
-                      className="flex cursor-pointer items-center gap-1 hover:text-green-700"
-                      title="Repost"
-                    >
-                      <RepostIcon className="h-6 w-6" /> 0
-                    </div>
-                    <div
-                      className="flex cursor-pointer items-center gap-1 hover:text-sky-700"
-                      title="Bookmark"
-                    >
-                      {post.bookmarkedBy.some((obj) => obj.id === user!.id) ? (
-                        <BookmarkIcon
-                          className="h-6 w-6 text-sky-600 hover:text-sky-700"
-                          onClick={() => handlePostUpdate(null, "false")}
-                        />
-                      ) : (
-                        <BookmarkIconOutline
-                          className="h-6 w-6 hover:text-sky-700"
-                          onClick={() => handlePostUpdate(null, "true")}
-                        />
-                      )}
-                      {post.bookmarkedBy.length}
+                    <div className="flex flex-col items-start gap-2">
+                      <Link
+                        to={`/${post.authorId}`}
+                        className="flex flex-col leading-[1.2]"
+                      >
+                        <div className="font-bold hover:underline">
+                          {post.author.name}
+                        </div>
+                        <div className="text-gray-600">{post.author.email}</div>
+                      </Link>
                     </div>
                   </div>
+                  <div className="text-lg">{post.content}</div>
+                  <Link
+                    to={`/posts/${post.id}`}
+                    className="text-gray-600 hover:underline"
+                  >
+                    {formatDate(post.createdAt)}
+                  </Link>
+
+                  <div className="flex items-center justify-between gap-2 border-y-1 border-gray-400 px-1 py-2 text-gray-600">
+                    <div className="flex w-full items-center justify-between select-none">
+                      <div
+                        className="flex cursor-pointer items-center gap-1 hover:text-pink-700"
+                        title="Like"
+                      >
+                        {post.likedBy.some((obj) => obj.id === user!.id) ? (
+                          <LikeIcon
+                            className="h-6 w-6 text-pink-600"
+                            onClick={() => handlePostUpdate("false")}
+                          />
+                        ) : (
+                          <LikeIconOutline
+                            className="h-6 w-6"
+                            onClick={() => handlePostUpdate("true")}
+                          />
+                        )}
+                        {post.likedBy.length}
+                      </div>
+
+                      <div
+                        className="flex cursor-pointer items-center gap-1 hover:text-sky-700"
+                        title="Comment"
+                      >
+                        <CommentIcon className="h-6 w-6" />
+                        {post.comments.length}
+                      </div>
+                      <div
+                        className="flex cursor-pointer items-center gap-1 hover:text-green-700"
+                        title="Repost"
+                      >
+                        <RepostIcon className="h-6 w-6" /> 0
+                      </div>
+                      <div
+                        className="flex cursor-pointer items-center gap-1 hover:text-sky-700"
+                        title="Bookmark"
+                      >
+                        {post.bookmarkedBy.some(
+                          (obj) => obj.id === user!.id,
+                        ) ? (
+                          <BookmarkIcon
+                            className="h-6 w-6 text-sky-600 hover:text-sky-700"
+                            onClick={() => handlePostUpdate(null, "false")}
+                          />
+                        ) : (
+                          <BookmarkIconOutline
+                            className="h-6 w-6 hover:text-sky-700"
+                            onClick={() => handlePostUpdate(null, "true")}
+                          />
+                        )}
+                        {post.bookmarkedBy.length}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+              <section className="flex gap-2">
+                <Link to={`/${user!.id}`}>
+                  <img
+                    src={post.author.profile.imageUrl || defaultPicture}
+                    alt="profile picture"
+                    className="h-10 w-10 min-w-max rounded-full"
+                  />
+                </Link>
+
+                <form action="#" className="flex flex-1 items-end">
+                  <textarea
+                    name="comment"
+                    id="comment"
+                    className="resize-none focus:outline-0 p-2 text-xl flex-1 field-sizing-content"
+                    placeholder="Add your comment"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                  >
+                  </textarea>
+                  <button type="submit" className="px-4 py-2 rounded-4xl bg-sky-600 font-bold text-white">Comment</button>
+                </form>
+              </section>
+            </>
+          ) : error ? (
+            <div>{error}</div>
           ) : (
             <ComponentLoader />
           )}
