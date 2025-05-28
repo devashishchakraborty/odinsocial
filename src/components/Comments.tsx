@@ -1,0 +1,187 @@
+import { MouseEvent, useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import defaultPicture from "../assets/defaultPicture.png";
+import { useNavigate } from "react-router-dom";
+import PageLoader from "./PageLoader";
+import { getTimeDifference } from "../utils/Utils";
+import { Comment } from "../types";
+import { HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
+import {
+  HeartIcon as LikeIconOutline,
+  ChatBubbleOvalLeftIcon as ReplyIcon,
+} from "@heroicons/react/24/outline";
+
+const Comments = ({ postId }: { postId: number }) => {
+  const { getAuthHeaders, user } = useContext(AuthContext);
+  const [comments, setComments] = useState<Comment[] | null>(null);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      setComments(null);
+
+      try {
+        const headers = await getAuthHeaders();
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments`,
+          {
+            method: "GET",
+            headers: headers,
+          },
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setComments(data);
+      } catch (err: any) {
+        console.error("Error fetching data:", err);
+        setError(err.message);
+      }
+    };
+    fetchComments();
+  }, []);
+
+  const handleUserClick = (e: MouseEvent, authorId: number) => {
+    e.stopPropagation(); // Prevent parent <Link> navigation
+    navigate(`/${authorId}`);
+  };
+
+  const handleCommentUpdate = async (
+    e: MouseEvent,
+    commentId: number,
+    isLiked: string | null = null,
+  ) => {
+    e.stopPropagation();
+
+    // Optimistic UI changes
+    setComments((comments) => {
+      return comments!.map((comment) => {
+        if (comment.id !== commentId) return comment;
+
+        const updatedComment = { ...comment };
+
+        if (isLiked === "true") {
+          updatedComment.likedBy = [
+            ...updatedComment.likedBy,
+            { id: user!.id },
+          ];
+        } else if (isLiked === "false") {
+          updatedComment.likedBy = updatedComment.likedBy.filter(
+            (likedBy) => likedBy.id !== user!.id,
+          );
+        }
+
+        return updatedComment;
+      });
+    });
+
+    try {
+      const headers = await getAuthHeaders();
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments/${commentId}`,
+        {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify({ isLiked }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (err: any) {
+      console.error("Error fetching data:", err);
+      setError(err.message);
+    }
+  };
+
+  if (error) return <section>{error}</section>;
+
+  return (
+    <section className="flex flex-col">
+      {comments ? (
+        comments.length === 0 ? (
+          <div className="p-4 text-center">Be the first to comment!</div>
+        ) : (
+          comments.map((comment: Comment) => {
+            const diff = getTimeDifference(comment.createdAt);
+            return (
+              <section
+                key={comment.id}
+                className="flex gap-2 border-b-1 border-gray-400 px-4 py-2"
+              >
+                <div onClick={(e) => handleUserClick(e, comment.author.id)}>
+                  <img
+                    src={comment.author.profile.imageUrl || defaultPicture}
+                    alt="profile picture"
+                    className="h-10 w-10 min-w-max rounded-full"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col gap-2">
+                  <div className="flex flex-col items-start">
+                    <div
+                      className="flex gap-1"
+                      onClick={(e) => handleUserClick(e, comment.author.id)}
+                    >
+                      <div className="font-bold hover:underline">
+                        {comment.author.name}
+                      </div>
+                      ·
+                      <div className="text-gray-600">
+                        {comment.author.email}
+                      </div>
+                      ·<div className="text-gray-600">{diff}</div>
+                    </div>
+                    <div>{comment.text}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-gray-600">
+                    <div className="flex w-sm items-center justify-between gap-10 select-none">
+                      <div
+                        className="flex items-center gap-1 hover:text-pink-700"
+                        title="Like"
+                      >
+                        {comment.likedBy.some((obj) => obj.id === user!.id) ? (
+                          <LikeIcon
+                            className="h-5 w-5 text-pink-600"
+                            onClick={(e) =>
+                              handleCommentUpdate(e, comment.id, "false")
+                            }
+                          />
+                        ) : (
+                          <LikeIconOutline
+                            className="h-5 w-5"
+                            onClick={(e) =>
+                              handleCommentUpdate(e, comment.id, "true")
+                            }
+                          />
+                        )}
+                        {comment.likedBy.length}
+                      </div>
+
+                      <div
+                        className="flex items-center gap-1 hover:text-sky-700"
+                        title="Comment"
+                      >
+                        <ReplyIcon
+                          className="h-5 w-5"
+                          onClick={(e) => handleCommentUpdate(e, comment.id)}
+                        />
+                        {comment.replies.length}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            );
+          })
+        )
+      ) : (
+        <PageLoader />
+      )}
+    </section>
+  );
+};
+
+export default Comments;

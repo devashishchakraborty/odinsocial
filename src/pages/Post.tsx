@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import ComponentLoader from "../components/ComponentLoader";
 import { formatDate } from "../utils/Utils";
+import Comments from "../components/Comments";
 
 const Post = () => {
   const { postId } = useParams();
@@ -199,7 +200,7 @@ const Post = () => {
               <section className="flex gap-2">
                 <Link to={`/${user!.id}`}>
                   <img
-                    src={post.author.profile.imageUrl || defaultPicture}
+                    src={user!.profile.imageUrl || defaultPicture}
                     alt="profile picture"
                     className="h-10 w-10 min-w-max rounded-full"
                   />
@@ -209,13 +210,18 @@ const Post = () => {
                   <textarea
                     name="comment"
                     id="comment"
-                    className="resize-none focus:outline-0 p-2 text-xl flex-1 field-sizing-content"
+                    className="field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
                     placeholder="Add your comment"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
+                  ></textarea>
+                  <button
+                    type="submit"
+                    className="cursor-pointer rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
+                    disabled={newComment.length === 0}
                   >
-                  </textarea>
-                  <button type="submit" className="px-4 py-2 rounded-4xl bg-sky-600 font-bold text-white">Comment</button>
+                    Comment
+                  </button>
                 </form>
               </section>
             </>
@@ -225,6 +231,7 @@ const Post = () => {
             <ComponentLoader />
           )}
         </section>
+        {post && <Comments postId={post.id} />}
       </section>
     </main>
   );

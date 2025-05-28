@@ -24,7 +24,7 @@ export interface Post {
   published: true;
   author: User;
   authorId: number;
-  comments: Comment[];
+  comments: { id: number }[];
   bookmarkedBy: { id: number }[];
 }
 
@@ -35,7 +35,9 @@ export interface Comment {
   text: string;
   post?: Post;
   postId: number;
-  replies?: Reply[];
+  author: User;
+  replies: { id: number }[];
+  likedBy: { id: number }[];
 }
 
 export interface Reply {
@@ -45,4 +47,6 @@ export interface Reply {
   text: string;
   comment?: Comment;
   commentId: number;
+  author: User;
+  likedBy: { id: number }[];
 }
