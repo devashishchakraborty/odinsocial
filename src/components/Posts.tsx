@@ -212,7 +212,7 @@ const Posts = ({
                           className="h-5 w-5"
                           onClick={(e) => handlePostUpdate(e, post.id)}
                         />
-                        {post.comments.length}
+                        0
                       </div>
                     </div>
 

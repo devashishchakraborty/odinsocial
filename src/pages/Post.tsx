@@ -21,7 +21,6 @@ const Post = () => {
   const [post, setPost] = useState<PostType | null>(null);
   const { user, getAuthHeaders } = useContext(AuthContext);
   const [error, setError] = useState(null);
-  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -101,14 +100,14 @@ const Post = () => {
     <main className="flex h-full px-30">
       <Sidebar selected={null} />
       <section className="w-2xl border-x-1 border-gray-400">
-        <div className="flex items-center gap-2 p-4 text-xl font-bold text-sky-950">
+        <div className="flex items-center gap-2 px-4 py-2 text-xl font-bold text-sky-950">
           <Link to="/" className="rounded-full p-2 hover:bg-gray-200">
             <ArrowLeftIcon className="h-5 w-5" />
           </Link>
           Post
         </div>
 
-        <section className="flex flex-col gap-4 border-b-1 border-gray-400 p-4">
+        <section className="flex flex-col gap-4 px-4 py-2">
           {post ? (
             <>
               <section className="flex gap-2">
@@ -196,33 +195,6 @@ const Post = () => {
                     </div>
                   </div>
                 </div>
-              </section>
-              <section className="flex gap-2">
-                <Link to={`/${user!.id}`}>
-                  <img
-                    src={user!.profile.imageUrl || defaultPicture}
-                    alt="profile picture"
-                    className="h-10 w-10 min-w-max rounded-full"
-                  />
-                </Link>
-
-                <form action="#" className="flex flex-1 items-end">
-                  <textarea
-                    name="comment"
-                    id="comment"
-                    className="field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
-                    placeholder="Add your comment"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                  ></textarea>
-                  <button
-                    type="submit"
-                    className="cursor-pointer rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
-                    disabled={newComment.length === 0}
-                  >
-                    Comment
-                  </button>
-                </form>
               </section>
             </>
           ) : error ? (

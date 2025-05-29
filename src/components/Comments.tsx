@@ -1,7 +1,7 @@
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import defaultPicture from "../assets/defaultPicture.png";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PageLoader from "./PageLoader";
 import { getTimeDifference } from "../utils/Utils";
 import { Comment } from "../types";
@@ -15,7 +15,8 @@ const Comments = ({ postId }: { postId: number }) => {
   const { getAuthHeaders, user } = useContext(AuthContext);
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [newComment, setNewComment] = useState("");
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -43,18 +44,40 @@ const Comments = ({ postId }: { postId: number }) => {
     fetchComments();
   }, []);
 
-  const handleUserClick = (e: MouseEvent, authorId: number) => {
-    e.stopPropagation(); // Prevent parent <Link> navigation
-    navigate(`/${authorId}`);
+  const addNewComment = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingComment(true);
+    try {
+      const headers = await getAuthHeaders();
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments/`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({ newComment }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setComments((prev) => {
+        if (!prev) return [data];
+        return [data, ...prev];
+      });
+      setNewComment("");
+    } catch (err: any) {
+      console.error("Error fetching data:", err);
+      setError(err.message);
+    } finally {
+      setIsSubmittingComment(false);
+    }
   };
 
   const handleCommentUpdate = async (
-    e: MouseEvent,
     commentId: number,
     isLiked: string | null = null,
   ) => {
-    e.stopPropagation();
-
     // Optimistic UI changes
     setComments((comments) => {
       return comments!.map((comment) => {
@@ -99,45 +122,74 @@ const Comments = ({ postId }: { postId: number }) => {
   if (error) return <section>{error}</section>;
 
   return (
-    <section className="flex flex-col">
-      {comments ? (
-        comments.length === 0 ? (
-          <div className="p-4 text-center">Be the first to comment!</div>
-        ) : (
-          comments.map((comment: Comment) => {
-            const diff = getTimeDifference(comment.createdAt);
-            return (
-              <section
-                key={comment.id}
-                className="flex gap-2 border-b-1 border-gray-400 px-4 py-2"
-              >
-                <div onClick={(e) => handleUserClick(e, comment.author.id)}>
-                  <img
-                    src={comment.author.profile.imageUrl || defaultPicture}
-                    alt="profile picture"
-                    className="h-10 w-10 min-w-max rounded-full"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col gap-2">
-                  <div className="flex flex-col items-start">
-                    <div
-                      className="flex gap-1"
-                      onClick={(e) => handleUserClick(e, comment.author.id)}
-                    >
-                      <div className="font-bold hover:underline">
-                        {comment.author.name}
-                      </div>
-                      ·
-                      <div className="text-gray-600">
-                        {comment.author.email}
-                      </div>
-                      ·<div className="text-gray-600">{diff}</div>
-                    </div>
-                    <div>{comment.text}</div>
-                  </div>
+    <>
+      <section className="flex gap-2 border-b-1 border-gray-400 px-4 pt-2 pb-4">
+        <Link to={`/${user!.id}`}>
+          <img
+            src={user!.profile.imageUrl || defaultPicture}
+            alt="profile picture"
+            className="h-10 w-10 min-w-max rounded-full"
+          />
+        </Link>
 
-                  <div className="flex items-center justify-between text-gray-600">
-                    <div className="flex w-sm items-center justify-between gap-10 select-none">
+        <form
+          action="#"
+          className="flex flex-1 items-end"
+          onSubmit={addNewComment}
+        >
+          <textarea
+            name="comment"
+            id="comment"
+            className="field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
+            placeholder="Add your comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          ></textarea>
+          <button
+            type="submit"
+            className="flex cursor-pointer items-center gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
+            disabled={newComment.length === 0 || isSubmittingComment}
+          >
+            Comment
+          </button>
+        </form>
+      </section>
+
+      <section className="flex flex-col">
+        {comments ? (
+          comments.length === 0 ? (
+            <div className="p-4 text-center">Be the first to comment!</div>
+          ) : (
+            comments.map((comment: Comment) => {
+              const diff = getTimeDifference(comment.createdAt);
+              return (
+                <section
+                  key={comment.id}
+                  className="flex gap-2 border-b-1 border-gray-400 px-4 py-2"
+                >
+                  <Link to={`/${comment.authorId}`}>
+                    <img
+                      src={comment.author.profile.imageUrl || defaultPicture}
+                      alt="profile picture"
+                      className="h-10 w-10 min-w-max rounded-full"
+                    />
+                  </Link>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <div className="flex flex-col items-start">
+                      <Link to={`/${comment.authorId}`} className="flex gap-1">
+                        <div className="font-bold hover:underline">
+                          {comment.author.name}
+                        </div>
+                        ·
+                        <div className="text-gray-600">
+                          {comment.author.email}
+                        </div>
+                        ·<div className="text-gray-600">{diff}</div>
+                      </Link>
+                      <div>{comment.text}</div>
+                    </div>
+
+                    <div className="flex w-sm items-center gap-10 text-gray-600 select-none">
                       <div
                         className="flex items-center gap-1 hover:text-pink-700"
                         title="Like"
@@ -145,15 +197,15 @@ const Comments = ({ postId }: { postId: number }) => {
                         {comment.likedBy.some((obj) => obj.id === user!.id) ? (
                           <LikeIcon
                             className="h-5 w-5 text-pink-600"
-                            onClick={(e) =>
-                              handleCommentUpdate(e, comment.id, "false")
+                            onClick={() =>
+                              handleCommentUpdate(comment.id, "false")
                             }
                           />
                         ) : (
                           <LikeIconOutline
                             className="h-5 w-5"
-                            onClick={(e) =>
-                              handleCommentUpdate(e, comment.id, "true")
+                            onClick={() =>
+                              handleCommentUpdate(comment.id, "true")
                             }
                           />
                         )}
@@ -166,21 +218,21 @@ const Comments = ({ postId }: { postId: number }) => {
                       >
                         <ReplyIcon
                           className="h-5 w-5"
-                          onClick={(e) => handleCommentUpdate(e, comment.id)}
+                          onClick={() => handleCommentUpdate(comment.id)}
                         />
                         {comment.replies.length}
                       </div>
                     </div>
                   </div>
-                </div>
-              </section>
-            );
-          })
-        )
-      ) : (
-        <PageLoader />
-      )}
-    </section>
+                </section>
+              );
+            })
+          )
+        ) : (
+          <PageLoader />
+        )}
+      </section>
+    </>
   );
 };
 
