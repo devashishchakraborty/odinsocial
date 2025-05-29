@@ -36,6 +36,7 @@ export interface Comment {
   post?: Post;
   postId: number;
   author: User;
+  authorId: number;
   replies: { id: number }[];
   likedBy: { id: number }[];
 }
