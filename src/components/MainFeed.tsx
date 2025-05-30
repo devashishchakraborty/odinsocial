@@ -5,7 +5,7 @@ const MainFeed = () => {
   const [showFollowingPosts, setShowFollowingPosts] = useState(false);
 
   return (
-    <section className="w-2xl border-x-1 border-gray-400">
+    <section className="border-x-1 border-gray-400">
       <section className="flex border-b-1 border-gray-400">
         <div
           className={`relative flex-1 border-r-1 border-gray-400 p-4 ${showFollowingPosts || "font-bold"} text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}

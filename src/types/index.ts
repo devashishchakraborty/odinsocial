@@ -49,5 +49,6 @@ export interface Reply {
   comment?: Comment;
   commentId: number;
   author: User;
+  authorId: number;
   likedBy: { id: number }[];
 }

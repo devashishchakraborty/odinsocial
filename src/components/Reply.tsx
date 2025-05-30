@@ -1,31 +1,38 @@
 import { FormEvent, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import defaultPicture from "../assets/defaultPicture.png";
+import { Reply } from "../types";
 import { Link } from "react-router-dom";
-import PageLoader from "./PageLoader";
+import defaultPicture from "../assets/defaultPicture.png";
 import { getTimeDifference } from "../utils/Utils";
-import { Comment } from "../types";
 import { HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
 import {
   HeartIcon as LikeIconOutline,
   ChatBubbleOvalLeftIcon as ReplyIcon,
 } from "@heroicons/react/24/outline";
+import PageLoader from "./PageLoader";
 
-const Comments = ({ postId }: { postId: number }) => {
+
+const Replies = ({
+  commentId,
+  showReplies = false,
+}: {
+  commentId: number;
+  showReplies: boolean;
+}) => {
   const { getAuthHeaders, user } = useContext(AuthContext);
-  const [comments, setComments] = useState<Comment[] | null>(null);
+  const [replies, setReplies] = useState<Reply[] | null>(null);
   const [error, setError] = useState(null);
-  const [newComment, setNewComment] = useState("");
-  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [newReply, setNewReply] = useState("");
+  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
   useEffect(() => {
     const fetchComments = async () => {
-      setComments(null);
+      setReplies(null);
 
       try {
         const headers = await getAuthHeaders();
         const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments`,
+          `${import.meta.env.VITE_API_BASE_URL}/posts/comments/${commentId}/replies`,
           {
             method: "GET",
             headers: headers,
@@ -35,7 +42,7 @@ const Comments = ({ postId }: { postId: number }) => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setComments(data);
+        setReplies(data);
       } catch (err: any) {
         console.error("Error fetching data:", err);
         setError(err.message);
@@ -44,66 +51,66 @@ const Comments = ({ postId }: { postId: number }) => {
     fetchComments();
   }, []);
 
-  const addNewComment = async (e: FormEvent) => {
+  const addNewReply = async (e: FormEvent) => {
     e.preventDefault();
-    setIsSubmittingComment(true);
+    setIsSubmittingReply(true);
     try {
       const headers = await getAuthHeaders();
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments/`,
+        `${import.meta.env.VITE_API_BASE_URL}/posts/comments/${commentId}/replies`,
         {
           method: "POST",
           headers: headers,
-          body: JSON.stringify({ newComment }),
+          body: JSON.stringify({ newReply }),
         },
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setComments((prev) => {
+      setReplies((prev) => {
         if (!prev) return [data];
         return [data, ...prev];
       });
-      setNewComment("");
+      setNewReply("");
     } catch (err: any) {
       console.error("Error fetching data:", err);
       setError(err.message);
     } finally {
-      setIsSubmittingComment(false);
+      setIsSubmittingReply(false);
     }
   };
 
-  const handleCommentUpdate = async (
-    commentId: number,
+  const handleReplyUpdate = async (
+    replyId: number,
     isLiked: string | null = null,
   ) => {
     // Optimistic UI changes
-    setComments((comments) => {
-      return comments!.map((comment) => {
-        if (comment.id !== commentId) return comment;
+    setReplies((replies) => {
+      return replies!.map((reply) => {
+        if (reply.id !== replyId) return reply;
 
-        const updatedComment = { ...comment };
+        const updatedReply = { ...reply };
 
         if (isLiked === "true") {
-          updatedComment.likedBy = [
-            ...updatedComment.likedBy,
+          updatedReply.likedBy = [
+            ...updatedReply.likedBy,
             { id: user!.id },
           ];
         } else if (isLiked === "false") {
-          updatedComment.likedBy = updatedComment.likedBy.filter(
+          updatedReply.likedBy = updatedReply.likedBy.filter(
             (likedBy) => likedBy.id !== user!.id,
           );
         }
 
-        return updatedComment;
+        return updatedReply;
       });
     });
 
     try {
       const headers = await getAuthHeaders();
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments/${commentId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/posts/comments/replies/${replyId}`,
         {
           method: "PUT",
           headers: headers,
@@ -135,58 +142,58 @@ const Comments = ({ postId }: { postId: number }) => {
         <form
           action="#"
           className="flex flex-1 items-end"
-          onSubmit={addNewComment}
+          onSubmit={addNewReply}
         >
           <textarea
-            name="comment"
-            id="comment"
+            name="reply"
+            id="reply"
             className="field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
-            placeholder="Add your comment"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Add your reply"
+            value={newReply}
+            onChange={(e) => setNewReply(e.target.value)}
           ></textarea>
           <button
             type="submit"
             className="flex cursor-pointer items-center gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
-            disabled={newComment.length === 0 || isSubmittingComment}
+            disabled={newReply.length === 0 || isSubmittingReply}
           >
-            Comment
+            Reply
           </button>
         </form>
       </section>
 
       <section className="flex flex-col">
-        {comments ? (
-          comments.length === 0 ? (
+        {replies ? (
+          replies.length === 0 ? (
             <div className="p-4 text-center">Be the first to comment!</div>
           ) : (
-            comments.map((comment: Comment) => {
-              const diff = getTimeDifference(comment.createdAt);
+            replies.map((reply: Reply) => {
+              const diff = getTimeDifference(reply.createdAt);
               return (
                 <section
-                  key={comment.id}
+                  key={reply.id}
                   className="flex gap-2 border-b-1 border-gray-400 px-4 py-2"
                 >
-                  <Link to={`/${comment.authorId}`}>
+                  <Link to={`/${reply.authorId}`}>
                     <img
-                      src={comment.author.profile.imageUrl || defaultPicture}
+                      src={reply.author.profile.imageUrl || defaultPicture}
                       alt="profile picture"
                       className="h-10 w-10 min-w-max rounded-full"
                     />
                   </Link>
                   <div className="flex flex-1 flex-col gap-2">
                     <div className="flex flex-col items-start">
-                      <Link to={`/${comment.authorId}`} className="flex gap-1">
+                      <Link to={`/${reply.authorId}`} className="flex gap-1">
                         <div className="font-bold hover:underline">
-                          {comment.author.name}
+                          {reply.author.name}
                         </div>
                         ·
                         <div className="text-gray-600">
-                          {comment.author.email}
+                          {reply.author.email}
                         </div>
                         ·<div className="text-gray-600">{diff}</div>
                       </Link>
-                      <div>{comment.text}</div>
+                      <div>{reply.text}</div>
                     </div>
 
                     <div className="flex w-sm items-center gap-10 text-gray-600 select-none">
@@ -194,22 +201,22 @@ const Comments = ({ postId }: { postId: number }) => {
                         className="flex cursor-pointer items-center gap-1 hover:text-pink-700"
                         title="Like"
                       >
-                        {comment.likedBy.some((obj) => obj.id === user!.id) ? (
+                        {reply.likedBy.some((obj) => obj.id === user!.id) ? (
                           <LikeIcon
                             className="h-5 w-5 text-pink-600"
                             onClick={() =>
-                              handleCommentUpdate(comment.id, "false")
+                              handleReplyUpdate(reply.id, "false")
                             }
                           />
                         ) : (
                           <LikeIconOutline
                             className="h-5 w-5"
                             onClick={() =>
-                              handleCommentUpdate(comment.id, "true")
+                              handleReplyUpdate(reply.id, "true")
                             }
                           />
                         )}
-                        {comment.likedBy.length}
+                        {reply.likedBy.length}
                       </div>
 
                       <div
@@ -218,7 +225,7 @@ const Comments = ({ postId }: { postId: number }) => {
                       >
                         <ReplyIcon
                           className="h-5 w-5"
-                          onClick={() => handleCommentUpdate(comment.id)}
+                          onClick={() => handleReplyUpdate(reply.id)}
                         />
                         Reply
                       </div>
@@ -236,4 +243,4 @@ const Comments = ({ postId }: { postId: number }) => {
   );
 };
 
-export default Comments;
+export default Replies;
