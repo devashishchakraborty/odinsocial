@@ -52,3 +52,7 @@ export interface Reply {
   authorId: number;
   likedBy: { id: number }[];
 }
+
+export type Action =
+  | { type: "SHOW"; commentId: number }
+  | { type: "HIDE"; commentId: number };

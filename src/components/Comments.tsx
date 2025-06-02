@@ -1,15 +1,27 @@
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useReducer, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import defaultPicture from "../assets/defaultPicture.png";
 import { Link } from "react-router-dom";
 import PageLoader from "./PageLoader";
 import { getTimeDifference } from "../utils/Utils";
-import { Comment } from "../types";
+import { Action, Comment } from "../types";
 import { HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
 import {
   HeartIcon as LikeIconOutline,
   ChatBubbleOvalLeftIcon as ReplyIcon,
 } from "@heroicons/react/24/outline";
+import Replies from "./Replies";
+
+const reducer = (state: number[], action: Action): number[] => {
+  switch (action.type) {
+    case "SHOW":
+      return [...state, action.commentId];
+    case "HIDE":
+      return state.filter((id) => id !== action.commentId);
+    default:
+      return state;
+  }
+};
 
 const Comments = ({ postId }: { postId: number }) => {
   const { getAuthHeaders, user } = useContext(AuthContext);
@@ -17,6 +29,9 @@ const Comments = ({ postId }: { postId: number }) => {
   const [error, setError] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+
+  // To set the comment Ids for visibility of reply input form under a comment
+  const [showReplyFormIds, replyFormDispatch] = useReducer(reducer, []);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -50,7 +65,7 @@ const Comments = ({ postId }: { postId: number }) => {
     try {
       const headers = await getAuthHeaders();
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments/`,
+        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments`,
         {
           method: "POST",
           headers: headers,
@@ -103,7 +118,7 @@ const Comments = ({ postId }: { postId: number }) => {
     try {
       const headers = await getAuthHeaders();
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}/comments/${commentId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/comments/${commentId}`,
         {
           method: "PUT",
           headers: headers,
@@ -215,14 +230,24 @@ const Comments = ({ postId }: { postId: number }) => {
                       <div
                         className="flex cursor-pointer items-center gap-1 rounded-2xl px-2 py-1 hover:bg-gray-200"
                         title="Reply"
+                        onClick={() =>
+                          replyFormDispatch({
+                            commentId: comment.id,
+                            type: "SHOW",
+                          })
+                        }
                       >
-                        <ReplyIcon
-                          className="h-5 w-5"
-                          onClick={() => handleCommentUpdate(comment.id)}
-                        />
+                        <ReplyIcon className="h-5 w-5" />
                         Reply
                       </div>
                     </div>
+                    {/* Showing replies based on the comment Id and whether the user wants to view them by passing appropriate state props and dispatch function for state changes */}
+                    <Replies
+                      commentId={comment.id}
+                      showReplyForm={showReplyFormIds.includes(comment.id)}
+                      setShowReplyForm={replyFormDispatch}
+                      repliesCount={comment.replies.length}
+                    />
                   </div>
                 </section>
               );

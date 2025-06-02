@@ -97,9 +97,9 @@ const Post = () => {
   };
 
   return (
-    <main className="flex h-full px-30">
+    <main className="flex min-h-full px-30">
       <Sidebar selected={null} />
-      <section className="w-2xl border-x-1 border-gray-400">
+      <section className="max-w-2xl border-x-1 border-gray-400 flex flex-col flex-1">
         <div className="flex items-center gap-2 px-4 py-2 text-xl font-bold text-sky-950">
           <Link to="/" className="rounded-full p-2 hover:bg-gray-200">
             <ArrowLeftIcon className="h-5 w-5" />
