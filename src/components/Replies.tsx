@@ -6,14 +6,9 @@ import {
   useState,
 } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Reply, Action } from "../types";
-import { Link } from "react-router-dom";
-import defaultPicture from "../assets/defaultPicture.png";
-import { getTimeDifference } from "../utils/Utils";
-import { HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
-import { HeartIcon as LikeIconOutline } from "@heroicons/react/24/outline";
-import ComponentLoader from "./ComponentLoader";
+import { Reply as ReplyType, Action } from "../types";
 import SmallLoader from "./SmallLoader";
+import Reply from "./Reply";
 
 // Taking the commentIds from those parent Comments component where the form input to take reply would be visible
 const Replies = ({
@@ -27,18 +22,20 @@ const Replies = ({
   showReplyForm: boolean;
   setShowReplyForm: ActionDispatch<[action: Action]>;
 }) => {
-  const { getAuthHeaders, user } = useContext(AuthContext);
-  const [_repliesCount, setRepliesCount] = useState(repliesCount);
-  const [replies, setReplies] = useState<Reply[] | null>(null);
+  const { getAuthHeaders } = useContext(AuthContext);
+  const [replies, setReplies] = useState<ReplyType[] | null>(null);
   const [error, setError] = useState(null);
   const [newReply, setNewReply] = useState("");
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
 
+  // For setting new replies added by user and separating them to not unnecessarily fetch all replies
+  const [newReplies, setNewReplies] = useState<ReplyType[] | null>(null);
+
   useEffect(() => {
     const fetchReplies = async () => {
       if (!showReplies) return;
-      if (replies) return replies;
+      if (replies) return;
 
       try {
         const headers = await getAuthHeaders();
@@ -53,6 +50,7 @@ const Replies = ({
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        setNewReplies(null);
         setReplies(data);
       } catch (err: any) {
         console.error("Error fetching data:", err);
@@ -79,11 +77,20 @@ const Replies = ({
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setReplies((prev) => {
-        if (!prev) return [data];
-        return [data, ...prev];
-      });
+
       setNewReply("");
+
+      if (showReplies) {
+        setReplies((prev) => {
+          if (!prev) return [data];
+          return [data, ...prev];
+        });
+      } else {
+        setNewReplies((prev) => {
+          if (!prev) return [data];
+          return [data, ...prev];
+        });
+      }
     } catch (err: any) {
       console.error("Error fetching data:", err);
       setError(err.message);
@@ -92,59 +99,16 @@ const Replies = ({
     }
   };
 
-  // For liking replies
-  const handleReplyUpdate = async (
-    replyId: number,
-    isLiked: string | null = null,
-  ) => {
-    // Optimistic UI changes
-    setReplies((replies) => {
-      return replies!.map((reply) => {
-        if (reply.id !== replyId) return reply;
-
-        const updatedReply = { ...reply };
-
-        if (isLiked === "true") {
-          updatedReply.likedBy = [...updatedReply.likedBy, { id: user!.id }];
-        } else if (isLiked === "false") {
-          updatedReply.likedBy = updatedReply.likedBy.filter(
-            (likedBy) => likedBy.id !== user!.id,
-          );
-        }
-
-        return updatedReply;
-      });
-    });
-
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts/comments/replies/${replyId}`,
-        {
-          method: "PUT",
-          headers: headers,
-          body: JSON.stringify({ isLiked }),
-        },
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-    } catch (err: any) {
-      console.error("Error fetching data:", err);
-      setError(err.message);
-    }
-  };
-
   if (error) return <section>{error}</section>;
 
   return (
     <>
-      {_repliesCount > 0 && (
+      {repliesCount > 0 && (
         <div
           className="cursor-pointer px-4 text-sm font-bold text-gray-600 hover:text-gray-700"
           onClick={() => setShowReplies(!showReplies)}
         >
-          {showReplies ? "Hide" : `View ${_repliesCount}`} Replies
+          {showReplies ? "Hide" : `View ${repliesCount}`} Replies
         </div>
       )}
 
@@ -182,61 +146,31 @@ const Replies = ({
                 className="flex cursor-pointer items-center gap-2 rounded-4xl bg-sky-600 px-3 py-1 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
                 disabled={newReply.length === 0 || isSubmittingReply}
               >
-                Reply
+                {isSubmittingReply ? (
+                  <SmallLoader className="px-3 py-0" />
+                ) : (
+                  "Reply"
+                )}
               </button>
             </div>
           </form>
         </section>
       )}
 
-      {showReplies && (replies 
-        ? replies.map((reply: Reply) => {
-            const diff = getTimeDifference(reply.createdAt);
-            return (
-              <section key={reply.id} className="flex gap-2 px-2 py-1">
-                <Link to={`/${reply.authorId}`}>
-                  <img
-                    src={reply.author.profile.imageUrl || defaultPicture}
-                    alt="profile picture"
-                    className="h-10 w-10 min-w-max rounded-full"
-                  />
-                </Link>
-                <div className="flex flex-1 flex-col gap-2">
-                  <div className="flex flex-col items-start">
-                    <Link to={`/${reply.authorId}`} className="flex gap-1">
-                      <div className="font-bold hover:underline">
-                        {reply.author.name}
-                      </div>
-                      ·<div className="text-gray-600">{reply.author.email}</div>
-                      ·<div className="text-gray-600">{diff}</div>
-                    </Link>
-                    <div>{reply.text}</div>
-                  </div>
-
-                  <div className="flex w-sm items-center gap-10 text-gray-600 select-none">
-                    <div
-                      className="flex cursor-pointer items-center gap-1 hover:text-pink-700"
-                      title="Like"
-                    >
-                      {reply.likedBy.some((obj) => obj.id === user!.id) ? (
-                        <LikeIcon
-                          className="h-5 w-5 text-pink-600"
-                          onClick={() => handleReplyUpdate(reply.id, "false")}
-                        />
-                      ) : (
-                        <LikeIconOutline
-                          className="h-5 w-5"
-                          onClick={() => handleReplyUpdate(reply.id, "true")}
-                        />
-                      )}
-                      {reply.likedBy.length}
-                    </div>
-                  </div>
-                </div>
-              </section>
-            );
-          })
-        : <SmallLoader/>)}
+      {showReplies ? (
+        replies ? (
+          replies.map((reply: ReplyType) => (
+            <Reply reply={reply} setReplies={setReplies} />
+          ))
+        ) : (
+          <SmallLoader />
+        )
+      ) : (
+        newReplies &&
+        newReplies.map((reply: ReplyType) => (
+          <Reply reply={reply} setReplies={setNewReplies} />
+        ))
+      )}
     </>
   );
 };
