@@ -11,6 +11,7 @@ import {
   ChatBubbleOvalLeftIcon as ReplyIcon,
 } from "@heroicons/react/24/outline";
 import Replies from "./Replies";
+import SmallLoader from "./SmallLoader";
 
 const reducer = (state: number[], action: Action): number[] => {
   switch (action.type) {
@@ -165,7 +166,11 @@ const Comments = ({ postId }: { postId: number }) => {
             className="flex cursor-pointer items-center gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
             disabled={newComment.length === 0 || isSubmittingComment}
           >
-            Comment
+            {isSubmittingComment ? (
+              <SmallLoader className="px-6 py-0" />
+            ) : (
+              "Comment"
+            )}
           </button>
         </form>
       </section>

@@ -198,10 +198,7 @@ const Posts = ({
                         className="flex items-center gap-1 hover:text-sky-700"
                         title="Comment"
                       >
-                        <CommentIcon
-                          className="h-5 w-5"
-                          onClick={(e) => handlePostUpdate(e, post.id)}
-                        />
+                        <CommentIcon className="h-5 w-5" />
                         {post.comments.length}
                       </div>
                       <div
