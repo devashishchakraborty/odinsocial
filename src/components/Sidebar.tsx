@@ -17,15 +17,19 @@ import {
   BellIcon as NotificationIcon,
 } from "@heroicons/react/24/solid";
 import Fa6SolidDragon from "../assets/OdinSocial";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
-const Sidebar = ({ selected }: {selected: string | null}) => {
+const Sidebar = ({ selected }: { selected: string | null }) => {
+  const { user } = useContext(AuthContext);
   return (
     <section className="flex min-w-2xs flex-col items-start text-xl">
       <Link
         to="/"
-        className="flex items-center p-4 font-['Cinzel'] text-2xl font-black text-sky-800 gap-2"
+        className="flex items-center gap-2 p-4 font-['Cinzel'] text-2xl font-black text-sky-800"
       >
-        <Fa6SolidDragon className="h-8 w-8"/>OdinSocial
+        <Fa6SolidDragon className="h-8 w-8" />
+        OdinSocial
       </Link>
       <Link
         to="/"
@@ -98,7 +102,7 @@ const Sidebar = ({ selected }: {selected: string | null}) => {
         )}
       </Link>
       <Link
-        to="/1"
+        to={`/user/${user!.id}`}
         className="flex items-center gap-3 rounded-4xl px-4 py-2 text-sky-950 transition-colors duration-200 hover:bg-gray-200"
       >
         {selected === "profile" ? (

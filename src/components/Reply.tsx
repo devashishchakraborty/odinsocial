@@ -44,7 +44,7 @@ const Reply = ({
     try {
       const headers = await getAuthHeaders();
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/posts/comments/replies/${replyId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/comments/replies/${replyId}`,
         {
           method: "PUT",
           headers: headers,

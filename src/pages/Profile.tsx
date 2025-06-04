@@ -44,7 +44,7 @@ const Profile = () => {
 
   return (
     <main className="flex h-full px-30">
-      <Sidebar selected="profile" />
+      <Sidebar selected={parseInt(userId!) === user!.id ? `profile` : null} />
       <section className="w-2xl border-x-1 border-gray-400">
         <div className="h-30 w-full bg-linear-to-tr from-pink-500 via-sky-500 to-green-500"></div>
         <section className="border-b-1 border-gray-400 p-4">
