@@ -76,7 +76,7 @@ const Posts = ({
 
   const handleUserClick = (e: MouseEvent, authorId: number) => {
     e.stopPropagation(); // Prevent parent <Link> navigation
-    navigate(`/${authorId}`);
+    navigate(`/user/${authorId}`);
   };
 
   const handlePostUpdate = async (

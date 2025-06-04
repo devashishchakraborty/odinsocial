@@ -61,7 +61,7 @@ const MainFeed = () => {
         </div>
       </section>
       <section className="flex gap-2 border-b-1 border-gray-400 p-4">
-        <Link to={`/${user!.id}`}>
+        <Link to={`/user/${user!.id}`}>
           <img
             src={user!.profile.imageUrl || defaultPicture}
             alt="profile picture"

@@ -64,7 +64,7 @@ const Reply = ({
 
   return (
     <section key={reply.id} className="flex gap-2 px-2 py-1">
-      <Link to={`/${reply.authorId}`}>
+      <Link to={`/user/${reply.authorId}`}>
         <img
           src={reply.author.profile.imageUrl || defaultPicture}
           alt="profile picture"
@@ -73,7 +73,7 @@ const Reply = ({
       </Link>
       <div className="flex flex-1 flex-col gap-2">
         <div className="flex flex-col items-start">
-          <Link to={`/${reply.authorId}`} className="flex gap-1">
+          <Link to={`/user/${reply.authorId}`} className="flex gap-1">
             <div className="font-bold hover:underline">{reply.author.name}</div>
             ·<div className="text-gray-600">{reply.author.email}</div>·
             <div className="text-gray-600">{diff}</div>

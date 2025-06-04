@@ -113,7 +113,7 @@ const Post = () => {
               <section className="flex gap-2">
                 <div className="flex flex-1 flex-col gap-4">
                   <div className="flex items-center gap-2">
-                    <Link to={`/${post.authorId}`}>
+                    <Link to={`/user/${post.authorId}`}>
                       <img
                         src={post.author.profile.imageUrl || defaultPicture}
                         alt="profile picture"
@@ -122,7 +122,7 @@ const Post = () => {
                     </Link>
                     <div className="flex flex-col items-start gap-2">
                       <Link
-                        to={`/${post.authorId}`}
+                        to={`/user/${post.authorId}`}
                         className="flex flex-col leading-[1.2]"
                       >
                         <div className="font-bold hover:underline">
