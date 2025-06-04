@@ -13,6 +13,7 @@ import {
   ArrowPathRoundedSquareIcon as RepostIcon,
 } from "@heroicons/react/24/outline";
 
+// Using this component for multiple use cases like bookmarks, following Posts, user posts etc.
 const Posts = ({
   showFollowingPosts,
   userId,
