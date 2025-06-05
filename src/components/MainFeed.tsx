@@ -39,24 +39,24 @@ const MainFeed = () => {
   };
 
   return (
-    <section className="w-2xl border-x-1 border-gray-400">
-      <section className="flex border-b-1 border-gray-400">
+    <section className="w-2xl border-x-1 border-gray-400 relative">
+      <section className="flex border-b-1 border-gray-400 sticky top-0 bg-white">
         <div
-          className={`relative flex-1 border-r-1 border-gray-400 p-4 ${showFollowingPosts || "font-bold"} text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
+          className={`flex-1 border-r-1 border-gray-400 p-4 ${showFollowingPosts || "font-bold"} text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
           onClick={() => setShowFollowingPosts(false)}
         >
           All Posts
           {showFollowingPosts || (
-            <div className="absolute bottom-0.5 left-1/2 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
+            <div className="absolute bottom-0.5 left-1/4 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
           )}
         </div>
         <div
-          className={`relative flex-1 p-4 text-center ${showFollowingPosts && "font-bold"} transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
+          className={`flex-1 p-4 text-center ${showFollowingPosts && "font-bold"} transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
           onClick={() => setShowFollowingPosts(true)}
         >
           Following
           {showFollowingPosts && (
-            <div className="absolute bottom-0.5 left-1/2 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
+            <div className="absolute bottom-0.5 left-3/4 h-1 w-15 -translate-x-1/2 rounded-full bg-sky-900"></div>
           )}
         </div>
       </section>
@@ -83,7 +83,7 @@ const MainFeed = () => {
             className="flex cursor-pointer items-center self-end gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
             disabled={newPost.length === 0 || isSubmittingPost}
           >
-            {isSubmittingPost ? <SmallLoader className="px-6 py-0" /> : "Post"}
+            {isSubmittingPost ? <SmallLoader className="px-2 py-0.5" /> : "Post"}
           </button>
         </form>
         {error && <section>{error}</section>}
