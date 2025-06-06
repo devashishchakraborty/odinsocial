@@ -19,14 +19,16 @@ const Posts = ({
   userId,
   showBookmarks,
   searchQuery,
+  newPosts = null,
 }: {
   showFollowingPosts?: boolean;
   userId?: number;
   showBookmarks?: boolean;
   searchQuery?: string;
+  newPosts?: Post[] | null;
 }) => {
   const { getAuthHeaders, user } = useContext(AuthContext);
-  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [posts, setPosts] = useState<Post[] | null>(newPosts);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -41,6 +43,10 @@ const Posts = ({
 
   useEffect(() => {
     const fetchPosts = async () => {
+      if (newPosts && posts) {
+        setPosts([...newPosts, ...posts]);
+        return
+      }
       setPosts(null);
 
       try {
@@ -72,7 +78,7 @@ const Posts = ({
       }
     };
     fetchPosts();
-  }, [showFollowingPosts]);
+  }, [showFollowingPosts, newPosts]);
 
   const handleUserClick = (e: MouseEvent, authorId: number) => {
     e.stopPropagation(); // Prevent parent <Link> navigation

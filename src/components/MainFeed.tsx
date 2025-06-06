@@ -4,12 +4,14 @@ import SmallLoader from "./SmallLoader";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import defaultPicture from "../assets/defaultPicture.png";
+import { Post } from "../types";
 
 const MainFeed = () => {
   const [showFollowingPosts, setShowFollowingPosts] = useState(false);
   const [isSubmittingPost, setIsSubmittingPost] = useState(false);
   const { user, getAuthHeaders } = useContext(AuthContext);
   const [newPost, setNewPost] = useState("");
+  const [posts, setPosts] = useState<Post[] | null>(null);
   const [error, setError] = useState(null);
 
   const addNewPost = async (e: FormEvent) => {
@@ -28,8 +30,12 @@ const MainFeed = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      const data = await response.json();
+      setPosts((prev) => {
+        if (prev) return [data, ...prev];
+        else return [data];
+      });
       setNewPost("");
-      window.location.reload();
     } catch (err: any) {
       console.error("Error fetching data:", err);
       setError(err.message);
@@ -39,8 +45,8 @@ const MainFeed = () => {
   };
 
   return (
-    <section className="w-2xl border-x-1 border-gray-400 relative">
-      <section className="flex border-b-1 border-gray-400 sticky top-0 bg-white">
+    <section className="relative w-2xl border-x-1 border-gray-400">
+      <section className="sticky top-0 flex border-b-1 border-gray-400 bg-white">
         <div
           className={`flex-1 border-r-1 border-gray-400 p-4 ${showFollowingPosts || "font-bold"} text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
           onClick={() => setShowFollowingPosts(false)}
@@ -69,7 +75,11 @@ const MainFeed = () => {
           />
         </Link>
 
-        <form action="#" className="flex flex-col flex-1" onSubmit={(e) => addNewPost(e)}>
+        <form
+          action="#"
+          className="flex flex-1 flex-col"
+          onSubmit={(e) => addNewPost(e)}
+        >
           <textarea
             name="post"
             id="post"
@@ -80,16 +90,20 @@ const MainFeed = () => {
           ></textarea>
           <button
             type="submit"
-            className="flex cursor-pointer items-center self-end gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
+            className="flex cursor-pointer items-center gap-2 self-end rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
             disabled={newPost.length === 0 || isSubmittingPost}
           >
-            {isSubmittingPost ? <SmallLoader className="px-2 py-0.5" /> : "Post"}
+            {isSubmittingPost ? (
+              <SmallLoader className="px-2 py-0.5" />
+            ) : (
+              "Post"
+            )}
           </button>
         </form>
         {error && <section>{error}</section>}
       </section>
 
-      <Posts showFollowingPosts={showFollowingPosts} />
+      <Posts showFollowingPosts={showFollowingPosts} newPosts={posts}/>
     </section>
   );
 };
