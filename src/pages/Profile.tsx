@@ -8,6 +8,7 @@ import ComponentLoader from "../components/ComponentLoader";
 import defaultPicture from "../assets/defaultPicture.png";
 import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { convertTimestampToDate } from "../utils/Utils";
+import RightSideBar from "../components/RightSideBar";
 
 const Profile = () => {
   const [_user, _setUser] = useState<User | null>(null); // User Profile I'm gonna view
@@ -39,11 +40,11 @@ const Profile = () => {
     };
     fetchUser();
   }, []);
-
+  
   if (error) return <section>{error}</section>;
 
   return (
-    <main className="flex h-full px-30">
+    <main className="flex flex-1 min-h-full px-30">
       <Sidebar selected={parseInt(userId!) === user!.id ? `profile` : null} />
       <section className="w-2xl border-x-1 border-gray-400">
         <div className="h-30 w-full bg-linear-to-tr from-pink-500 via-sky-500 to-green-500"></div>
@@ -103,6 +104,7 @@ const Profile = () => {
         </section>
         {_user ? <Posts userId={_user.id} /> : <ComponentLoader />}
       </section>
+      <RightSideBar/>
     </main>
   );
 };
