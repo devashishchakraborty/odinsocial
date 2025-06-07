@@ -9,10 +9,8 @@ export interface User {
     imageUrl: string | null;
     userId: number;
   };
-  _count?: {
-    followers: number;
-    following: number;
-  };
+  followers?: { id: number }[];
+  following?: { id: number }[];
 }
 
 export interface Post {
