@@ -151,7 +151,7 @@ const Posts = ({
             const diff = getTimeDifference(post.createdAt);
             return (
               <section
-                onClick={() => navigate(`/posts/${post.id}`)}
+                onClick={() => navigate(`/post/${post.id}`)}
                 key={post.id}
                 className="flex gap-2 border-b-1 border-gray-400 px-4 py-2 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
               >

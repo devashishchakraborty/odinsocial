@@ -27,6 +27,11 @@ const Post = () => {
       setPost(null);
 
       try {
+
+        if (!parseInt(postId!)) {
+          throw new Error("Page Not Found!");
+        }
+
         const headers = await getAuthHeaders();
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}/posts/${postId}`,
@@ -36,7 +41,7 @@ const Post = () => {
           },
         );
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(response.status === 404 ? "Post Not Found!" : `HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         setPost(data);
@@ -134,7 +139,7 @@ const Post = () => {
                   </div>
                   <div className="text-lg">{post.content}</div>
                   <Link
-                    to={`/posts/${post.id}`}
+                    to={`/post/${post.id}`}
                     className="text-gray-600 hover:underline"
                   >
                     {formatDate(post.createdAt)}
@@ -198,7 +203,7 @@ const Post = () => {
               </section>
             </>
           ) : error ? (
-            <div>{error}</div>
+            <div className="flex font-bold items-center justify-center">{error}</div>
           ) : (
             <ComponentLoader />
           )}

@@ -6,7 +6,7 @@ import ComponentLoader from "./ComponentLoader";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
-const RightSideBar = () => {
+const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState<User[] | null>(null);
   const { getAuthHeaders } = useContext(AuthContext);
@@ -18,7 +18,7 @@ const RightSideBar = () => {
       try {
         const headers = await getAuthHeaders();
         const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/users`,
+          `${import.meta.env.VITE_API_BASE_URL}/users${currentUserId ? "?excludeUserId=" + currentUserId : ""}`,
           {
             method: "GET",
             headers: headers,
@@ -35,10 +35,10 @@ const RightSideBar = () => {
       }
     };
     fetchUsers();
-  }, []);
+  }, [currentUserId]);
 
   return (
-    <section className="p-4 sticky top-0 h-screen overflow-y-auto">
+    <section className="sticky top-0 h-screen overflow-y-auto p-4">
       <form className="relative mb-4">
         <MagnifyingGlassIcon className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-700" />
         <input
@@ -56,7 +56,12 @@ const RightSideBar = () => {
         {users
           ? users.map((user) => {
               return (
-                <div key={user.id} className="flex gap-2 p-4 items-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100">
+                <Link
+                  to={`/user/${user.id}`}
+                  key={user.id}
+                  
+                  className="flex items-center gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                >
                   <img
                     src={user.profile.imageUrl || defaultPicture}
                     alt={user.name}
@@ -66,10 +71,10 @@ const RightSideBar = () => {
                     <div className="font-bold">{user.name}</div>
                     <div className="text-gray-600">{user.email}</div>
                   </div>
-                  <button className="ml-auto cursor-pointer rounded-3xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700">
+                  <button onClick={(e) => e.preventDefault()} className="ml-auto cursor-pointer rounded-3xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700">
                     Follow
                   </button>
-                </div>
+                </Link>
               );
             })
           : error || <ComponentLoader />}

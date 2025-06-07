@@ -52,7 +52,7 @@ function App() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/user/:userId" element={<Profile />} />
-        <Route path="/posts/:postId" element={<Post />} />
+        <Route path="/post/:postId" element={<Post />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
