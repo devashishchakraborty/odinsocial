@@ -12,11 +12,12 @@ import RightSideBar from "../components/RightSideBar";
 
 const Profile = () => {
   const [_user, _setUser] = useState<User | null>(null); // User Profile I'm gonna view
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const { getAuthHeaders, user } = useContext(AuthContext);
   const { userId } = useParams();
   useEffect(() => {
     const fetchUser = async () => {
+      if (!userId || !parseInt(userId)) return setError("User Not found");
       _setUser(null);
 
       try {
@@ -29,7 +30,11 @@ const Profile = () => {
           },
         );
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(
+            response.status === 404
+              ? "User Not Found"
+              : `HTTP error! Status: ${response.status}`,
+          );
         }
         const data = await response.json();
         _setUser(data);
@@ -39,12 +44,50 @@ const Profile = () => {
       }
     };
     fetchUser();
-  }, []);
-  
+  }, [userId]);
+
+  const toggleFollow = async (action: string) => {
+    if (!user || !_user) return;
+
+    _setUser((prev) => {
+      if (!prev) return prev;
+
+      const updatedUser = { ...prev };
+
+      if (action === "FOLLOW") {
+        updatedUser.followers = [...updatedUser.followers!, { id: user!.id }];
+      } else if (action === "UNFOLLOW") {
+        updatedUser.followers = prev.followers!.filter(
+          (follower) => follower.id !== user!.id,
+        );
+      }
+
+      return updatedUser;
+    });
+
+    try {
+      const headers = await getAuthHeaders();
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${_user.id}/toggle-follow`,
+        {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify({ action }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (err: any) {
+      console.error("Error fetching data:", err);
+      setError(err.message);
+    }
+  };
+
   if (error) return <section>{error}</section>;
 
   return (
-    <main className="flex flex-1 min-h-full px-30">
+    <main className="flex min-h-full flex-1 px-30">
       <Sidebar selected={parseInt(userId!) === user!.id ? `profile` : null} />
       <section className="w-2xl border-x-1 border-gray-400">
         <div className="h-30 w-full bg-linear-to-tr from-pink-500 via-sky-500 to-green-500"></div>
@@ -67,8 +110,20 @@ const Profile = () => {
                       <button className="cursor-pointer rounded-3xl border-1 border-sky-900 bg-white px-4 py-2 font-bold text-sky-950 hover:bg-gray-100">
                         Edit Profile
                       </button>
+                    ) : _user.followers?.some(
+                        (follower) => follower.id === user!.id,
+                      ) ? (
+                      <button
+                        className="cursor-pointer rounded-3xl border-1 border-sky-900 bg-white px-4 py-2 font-bold text-sky-950 hover:bg-gray-100"
+                        onClick={() => toggleFollow("UNFOLLOW")}
+                      >
+                        Following
+                      </button>
                     ) : (
-                      <button className="cursor-pointer rounded-3xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700">
+                      <button
+                        className="cursor-pointer rounded-3xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700"
+                        onClick={() => toggleFollow("FOLLOW")}
+                      >
                         Follow
                       </button>
                     )}
@@ -83,18 +138,21 @@ const Profile = () => {
               </div>
               <div className="flex items-center gap-4 text-gray-700">
                 <div className="flex items-center gap-1">
-                  <MapPinIcon className="h-4 w-4"/> India
+                  <MapPinIcon className="h-4 w-4" /> India
                 </div>
                 <div className="flex items-center gap-1">
-                  <CalendarDaysIcon className="h-4 w-4"/> Joined {convertTimestampToDate(_user.createdAt!)}
+                  <CalendarDaysIcon className="h-4 w-4" /> Joined{" "}
+                  {convertTimestampToDate(_user.createdAt!)}
                 </div>
               </div>
               <div className="flex gap-4 text-gray-700">
                 <div>
-                  <b className="text-sky-950">{_user._count?.followers}</b> Followers
+                  <b className="text-sky-950">{_user.followers?.length}</b>{" "}
+                  Followers
                 </div>
                 <div>
-                  <b className="text-sky-950">{_user._count?.following}</b> Following
+                  <b className="text-sky-950">{_user.following?.length}</b>{" "}
+                  Following
                 </div>
               </div>
             </section>
@@ -104,7 +162,7 @@ const Profile = () => {
         </section>
         {_user ? <Posts userId={_user.id} /> : <ComponentLoader />}
       </section>
-      <RightSideBar/>
+      <RightSideBar currentUserId={parseInt(userId!)} />
     </main>
   );
 };

@@ -20,7 +20,7 @@ import Fa6SolidDragon from "../assets/OdinSocial";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-const Sidebar = ({ selected }: { selected: string | null }) => {
+const Sidebar = ({ selected = null }: { selected?: string | null }) => {
   const { user } = useContext(AuthContext);
   return (
     <div className="sticky top-0 h-screen overflow-y-auto">
