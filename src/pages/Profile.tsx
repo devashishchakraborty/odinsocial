@@ -3,7 +3,7 @@ import Posts from "../components/Posts";
 import { useContext, useEffect, useState } from "react";
 import { User } from "../types";
 import { AuthContext } from "../context/AuthContext";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ComponentLoader from "../components/ComponentLoader";
 import defaultPicture from "../assets/defaultPicture.png";
 import { CalendarDaysIcon, MapPinIcon } from "@heroicons/react/24/outline";
@@ -146,14 +146,14 @@ const Profile = () => {
                 </div>
               </div>
               <div className="flex gap-4 text-gray-700">
-                <div>
+                <Link to={`/user/${_user.id}/followers`}>
                   <b className="text-sky-950">{_user.followers?.length}</b>{" "}
                   Followers
-                </div>
-                <div>
+                </Link>
+                <Link to={`/user/${_user.id}/following`}>
                   <b className="text-sky-950">{_user.following?.length}</b>{" "}
                   Following
-                </div>
+                </Link>
               </div>
             </section>
           ) : (
