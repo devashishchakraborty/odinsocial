@@ -100,8 +100,13 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
       </form>
       <section className="rounded-2xl border-1 border-gray-400">
         <h1 className="p-4 text-xl font-bold">Who to follow</h1>
-        {users
-          ? users.map((_user) => {
+        {users ? (
+          users.length === 0 ? (
+            <div className="p-4">
+              No Users left to follow!
+            </div>
+          ) : (
+            users.map((_user) => {
               return (
                 <Link
                   to={`/user/${_user.id}`}
@@ -137,7 +142,10 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
                 </Link>
               );
             })
-          : error || <ComponentLoader />}
+          )
+        ) : (
+          error || <ComponentLoader />
+        )}
         <div className="rounded-b-2xl p-4 text-sky-700 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100">
           <Link to="#">Show More</Link>
         </div>
