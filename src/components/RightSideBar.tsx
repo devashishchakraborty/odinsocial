@@ -102,26 +102,27 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
         <h1 className="p-4 text-xl font-bold">Who to follow</h1>
         {users ? (
           users.length === 0 ? (
-            <div className="p-4">
-              No Users left to follow!
-            </div>
+            <div className="p-4">No Users left to follow!</div>
           ) : (
             users.map((_user) => {
               return (
                 <Link
                   to={`/user/${_user.id}`}
                   key={_user.id}
-                  className="flex items-center gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                  className="flex items-center gap-2 p-4 justify-between transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
                 >
-                  <img
-                    src={_user.profile.imageUrl || defaultPicture}
-                    alt={_user.name}
-                    className="h-10 w-10 min-w-max rounded-full"
-                  />
-                  <div>
-                    <div className="font-bold">{_user.name}</div>
-                    <div className="text-gray-600">{_user.email}</div>
+                  <div className="flex gap-2">
+                    <img
+                      src={_user.profile.imageUrl || defaultPicture}
+                      alt={_user.name}
+                      className="h-10 w-10 min-w-max rounded-full"
+                    />
+                    <div>
+                      <div className="font-bold">{_user.name}</div>
+                      <div className="text-gray-600">{_user.email}</div>
+                    </div>
                   </div>
+
                   {_user.followers?.some(
                     (follower) => follower.id === user!.id,
                   ) ? (

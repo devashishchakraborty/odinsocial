@@ -15,6 +15,7 @@ import {
 import ComponentLoader from "../components/ComponentLoader";
 import { formatDate } from "../utils/Utils";
 import Comments from "../components/Comments";
+import RightSideBar from "../components/RightSideBar";
 
 const Post = () => {
   const { postId } = useParams();
@@ -27,7 +28,6 @@ const Post = () => {
       setPost(null);
 
       try {
-
         if (!parseInt(postId!)) {
           throw new Error("Page Not Found!");
         }
@@ -41,7 +41,11 @@ const Post = () => {
           },
         );
         if (!response.ok) {
-          throw new Error(response.status === 404 ? "Post Not Found!" : `HTTP error! Status: ${response.status}`);
+          throw new Error(
+            response.status === 404
+              ? "Post Not Found!"
+              : `HTTP error! Status: ${response.status}`,
+          );
         }
         const data = await response.json();
         setPost(data);
@@ -102,9 +106,9 @@ const Post = () => {
   };
 
   return (
-    <main className="flex min-h-full px-30">
+    <main className="flex min-h-full flex-1 px-30">
       <Sidebar selected={null} />
-      <section className="max-w-2xl border-x-1 border-gray-400 flex flex-col flex-1">
+      <section className="flex max-w-2xl flex-1 flex-col border-x-1 border-gray-400">
         <div className="flex items-center gap-2 px-4 py-2 text-xl font-bold text-sky-950">
           <Link to="/" className="rounded-full p-2 hover:bg-gray-200">
             <ArrowLeftIcon className="h-5 w-5" />
@@ -203,13 +207,16 @@ const Post = () => {
               </section>
             </>
           ) : error ? (
-            <div className="flex font-bold items-center justify-center">{error}</div>
+            <div className="flex items-center justify-center font-bold">
+              {error}
+            </div>
           ) : (
             <ComponentLoader />
           )}
         </section>
         {post && <Comments postId={post.id} />}
       </section>
+      <RightSideBar />
     </main>
   );
 };

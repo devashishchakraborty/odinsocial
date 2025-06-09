@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Users from "../components/Users";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import RightSideBar from "../components/RightSideBar";
 const Followers = () => {
   const { userId } = useParams();
   return (
@@ -19,6 +20,7 @@ const Followers = () => {
         </div>
         <Users type="followers" />
       </section>
+      <RightSideBar />
     </main>
   );
 };
