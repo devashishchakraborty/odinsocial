@@ -15,6 +15,7 @@ import Post from "./pages/Post";
 import NotFound from "./pages/NotFound";
 import Followers from "./pages/Followers";
 import Following from "./pages/Following";
+import EditProfile from "./pages/EditProfile";
 
 const PublicRoute = () => {
   const { isAuthenticated, isAuthenticating } = useContext(AuthContext);
@@ -53,6 +54,7 @@ function App() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/user/:userId" element={<Profile />} />
         <Route path="/user/:userId/followers" element={<Followers />} />
         <Route path="/user/:userId/following" element={<Following />} />

@@ -8,6 +8,7 @@ export interface User {
     bio: string | null;
     imageUrl: string | null;
     userId: number;
+    location: string;
   };
   followers?: { id: number }[];
   following?: { id: number }[];
