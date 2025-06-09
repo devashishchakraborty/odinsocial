@@ -9,7 +9,7 @@ const Bookmarks = () => {
   return (
     <main className="flex h-full px-30">
       <Sidebar selected="bookmarks" />
-      <section className="w-2xl border-x-1 border-gray-400">
+      <section className="w-xl border-x-1 border-gray-400">
         <div className="flex items-center gap-4 p-4 text-2xl font-bold text-sky-950">
           <Link to="/" className="rounded-full p-2 hover:bg-gray-200">
             <ArrowLeftIcon className="h-6 w-6" />

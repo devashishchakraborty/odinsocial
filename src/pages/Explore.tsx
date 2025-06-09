@@ -6,7 +6,7 @@ const Explore = () => {
   return (
     <main className="flex h-full px-30">
       <Sidebar selected="explore" />
-      <section className="w-2xl border-x-1 border-gray-400 p-4">
+      <section className="w-xl border-x-1 border-gray-400 p-4">
         <form className="relative mb-4 w-full">
           <MagnifyingGlassIcon className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-700" />
           <input

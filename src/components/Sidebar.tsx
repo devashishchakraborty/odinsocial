@@ -24,7 +24,7 @@ const Sidebar = ({ selected = null }: { selected?: string | null }) => {
   const { user } = useContext(AuthContext);
   return (
     <div className="sticky top-0 h-screen overflow-y-auto">
-      <section className="flex min-w-2xs flex-col items-start text-xl">
+      <section className="flex min-w-3xs flex-col items-start text-xl">
         <Link
           to="/"
           className="flex items-center gap-2 p-4 font-['Cinzel'] text-2xl font-black text-sky-800"

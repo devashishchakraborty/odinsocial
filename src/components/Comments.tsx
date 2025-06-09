@@ -156,7 +156,7 @@ const Comments = ({ postId }: { postId: number }) => {
           <textarea
             name="comment"
             id="comment"
-            className="field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
+            className="field-sizing-content flex-1 resize-none p-2 text-lg focus:outline-0"
             placeholder="Add your comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
