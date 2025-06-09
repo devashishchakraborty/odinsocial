@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Loading from "../components/Loading";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ const Login = () => {
   const [loginError, setLoginError] = useState("");
   const { login, isSubmitting } = useContext(AuthContext);
 
-  const handleLogin = async (e: any) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     const response = await login(email, password);
     if (response.success) {
@@ -19,12 +19,23 @@ const Login = () => {
     }
   };
 
+  const guestLogin = async () => {
+    const response = await login("guest@email.com", "guest");
+    if (response.success) {
+      window.location.reload();
+    } else {
+      setLoginError(response.error.message);
+    }
+  }
+
   return (
     <>
       <main className="flex h-full items-center justify-center p-4 text-lg sm:px-16 lg:gap-8 xl:gap-16 xl:px-32">
         <section className="hidden flex-col gap-4 text-lg lg:flex">
           <section>
-            <h1 className="mb-8 text-5xl font-bold text-sky-800 font-['Cinzel']">OdinSocial</h1>
+            <h1 className="mb-8 font-['Cinzel'] text-5xl font-bold text-sky-800">
+              OdinSocial
+            </h1>
             <p>
               Connect. Share. Inspire. Your social space, built the way it
               should be.
@@ -71,7 +82,7 @@ const Login = () => {
           <h1 className="mb-4 hidden text-2xl font-bold sm:text-3xl lg:block">
             Sign in
           </h1>
-          <h1 className="mb-4 text-4xl font-bold text-sky-800 lg:hidden font-['Cinzel']">
+          <h1 className="mb-4 font-['Cinzel'] text-4xl font-bold text-sky-800 lg:hidden">
             OdinSocial
           </h1>
           <form
@@ -111,12 +122,9 @@ const Login = () => {
               type="button"
               className="flex cursor-pointer justify-center rounded-sm bg-gray-500 p-4 text-white hover:bg-gray-600"
               disabled={isSubmitting}
-              onClick={() => {
-                setEmail("guest@email.com");
-                setPassword("guest");
-              }}
+              onClick={() => guestLogin()}
             >
-              Fill Guest Info
+              {isSubmitting ? <Loading /> : "Guest Login"}
             </button>
 
             <div>
