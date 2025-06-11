@@ -140,7 +140,7 @@ const Comments = ({ postId }: { postId: number }) => {
   return (
     <>
       <section className="flex gap-2 border-b-1 border-gray-400 px-4 pt-2 pb-4">
-        <Link to={`/${user!.id}`}>
+        <Link to={`/user/${user!.id}`}>
           <img
             src={user!.profile.imageUrl || defaultPicture}
             alt="profile picture"
@@ -187,7 +187,7 @@ const Comments = ({ postId }: { postId: number }) => {
                   key={comment.id}
                   className="flex gap-2 border-b-1 border-gray-400 px-4 py-2"
                 >
-                  <Link to={`/${comment.authorId}`}>
+                  <Link to={`/user/${comment.authorId}`}>
                     <img
                       src={comment.author.profile.imageUrl || defaultPicture}
                       alt="profile picture"
@@ -196,7 +196,7 @@ const Comments = ({ postId }: { postId: number }) => {
                   </Link>
                   <div className="flex flex-1 flex-col gap-2">
                     <div className="flex flex-col items-start">
-                      <Link to={`/${comment.authorId}`} className="flex gap-1">
+                      <Link to={`/user/${comment.authorId}`} className="flex gap-1">
                         <div className="font-bold hover:underline">
                           {comment.author.name}
                         </div>

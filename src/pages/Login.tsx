@@ -1,5 +1,4 @@
 import { FormEvent, useContext, useState } from "react";
-import Loading from "../components/Loading";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
@@ -116,7 +115,7 @@ const Login = () => {
               className="flex cursor-pointer justify-center rounded-sm bg-sky-500 p-4 text-white hover:bg-sky-600"
               disabled={isSubmitting}
             >
-              {isSubmitting ? <Loading /> : "Login"}
+              Login
             </button>
             <button
               type="button"
@@ -124,7 +123,7 @@ const Login = () => {
               disabled={isSubmitting}
               onClick={() => guestLogin()}
             >
-              {isSubmitting ? <Loading /> : "Guest Login"}
+              Guest Login
             </button>
 
             <div>

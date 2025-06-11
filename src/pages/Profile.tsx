@@ -101,7 +101,7 @@ const Profile = () => {
                       <img
                         src={_user.profile.imageUrl || defaultPicture}
                         alt="profile picture"
-                        className="h-30 w-30 min-w-max rounded-full"
+                        className="h-30 w-30 min-w-max rounded-full object-cover"
                       />
                     </div>
                   </div>

@@ -27,7 +27,10 @@ interface AuthContextType {
     password: string,
   ) => Promise<{ success: boolean; error?: any }>;
   logout: () => void;
-  getAuthHeaders: () => Promise<{}>;
+  getAuthHeaders: () => Promise<{
+    "Content-Type": string;
+    Authorization: string;
+  }>;
 }
 
 interface ProviderPropsType {
@@ -43,7 +46,10 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => ({ success: false }),
   register: async () => ({ success: false }),
   logout: () => {},
-  getAuthHeaders: async () => ({}),
+  getAuthHeaders: async () => ({
+    "Content-Type": "application/json",
+    Authorization: `Bearer `,
+  }),
 });
 
 const AuthProvider = ({ children }: ProviderPropsType) => {
@@ -87,12 +93,12 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
 
   const getAuthHeaders = async () => {
     let token = localStorage.getItem("auth_token");
-    if (!token) return {};
-
-    const { isExpired } = decodeAndCheckExpiry(token);
-    if (isExpired) {
-      token = await refreshToken();
-      if (token) localStorage.setItem("auth_token", token);
+    if (token) {
+      const { isExpired } = decodeAndCheckExpiry(token);
+      if (isExpired) {
+        token = await refreshToken();
+        if (token) localStorage.setItem("auth_token", token);
+      }
     }
 
     return {
