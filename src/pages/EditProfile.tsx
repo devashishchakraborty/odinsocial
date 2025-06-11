@@ -6,6 +6,9 @@ import { AuthContext } from "../context/AuthContext";
 import SmallLoader from "../components/SmallLoader";
 import { User } from "../types";
 import ComponentLoader from "../components/ComponentLoader";
+import UploadImage from "../components/UploadImage";
+import defaultPicture from "../assets/defaultPicture.png";
+
 const EditProfile = () => {
   const { user, getAuthHeaders } = useContext(AuthContext);
   const [myProfile, setMyProfile] = useState<User | null>(null);
@@ -86,11 +89,13 @@ const EditProfile = () => {
           </Link>
           Edit Profile
         </div>
+
         {myProfile ? (
           <form
             className="relative mb-4 flex w-full flex-col gap-4 text-lg"
             onSubmit={(e) => editProfile(e)}
           >
+            <UploadImage url={myProfile.profile.imageUrl || defaultPicture} />
             <div>
               <label htmlFor="name">Name</label>
               <input
