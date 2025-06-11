@@ -112,14 +112,14 @@ const Login = () => {
             />
             <button
               type="submit"
-              className="flex cursor-pointer justify-center rounded-sm bg-sky-500 p-4 text-white hover:bg-sky-600"
+              className="flex cursor-pointer justify-center rounded-sm bg-sky-500 p-4 text-white hover:bg-sky-600 disabled:bg-sky-200"
               disabled={isSubmitting}
             >
               Login
             </button>
             <button
               type="button"
-              className="flex cursor-pointer justify-center rounded-sm bg-gray-500 p-4 text-white hover:bg-gray-600"
+              className="flex cursor-pointer justify-center rounded-sm bg-gray-500 p-4 text-white hover:bg-gray-600 disabled:bg-sky-200"
               disabled={isSubmitting}
               onClick={() => guestLogin()}
             >

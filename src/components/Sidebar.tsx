@@ -7,6 +7,7 @@ import {
   EnvelopeIcon as MessagesIconOutline,
   UserCircleIcon as ProfileIconOutline,
   BellIcon as NotificationIconOutline,
+  ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import {
   HomeIcon,
@@ -21,10 +22,10 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const Sidebar = ({ selected = null }: { selected?: string | null }) => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   return (
     <div className="sticky top-0 h-screen overflow-y-auto">
-      <section className="flex min-w-3xs flex-col items-start text-xl">
+      <section className="flex h-full min-w-3xs flex-col items-start text-xl">
         <Link
           to="/"
           className="flex items-center gap-2 p-4 font-['Cinzel'] text-2xl font-black text-sky-800"
@@ -116,6 +117,12 @@ const Sidebar = ({ selected = null }: { selected?: string | null }) => {
             </>
           )}
         </Link>
+        <button
+          onClick={() => logout()}
+          className="mt-auto mb-4 flex cursor-pointer items-center gap-3 rounded-4xl px-4 py-2 text-pink-600 transition-colors duration-200 hover:bg-pink-600 hover:text-white"
+        >
+          <ArrowLeftStartOnRectangleIcon className="h-8 w-8" /> Logout
+        </button>
       </section>
     </div>
   );
