@@ -159,7 +159,7 @@ const Posts = ({
                   <img
                     src={post.author.profile.imageUrl || defaultPicture}
                     alt="profile picture"
-                    className="h-10 w-10 min-w-max rounded-full"
+                    className="h-10 w-10 min-w-10 rounded-full object-cover"
                   />
                 </div>
                 <div className="flex flex-1 flex-col gap-2">

@@ -109,13 +109,13 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
                 <Link
                   to={`/user/${_user.id}`}
                   key={_user.id}
-                  className="flex items-center gap-2 p-4 justify-between transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                  className="flex items-center justify-between gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
                 >
                   <div className="flex gap-2">
                     <img
                       src={_user.profile.imageUrl || defaultPicture}
                       alt={_user.name}
-                      className="h-10 w-10 min-w-max rounded-full"
+                      className="h-10 w-10 min-w-10 rounded-full object-cover"
                     />
                     <div>
                       <div className="font-bold">{_user.name}</div>

@@ -144,7 +144,7 @@ const Comments = ({ postId }: { postId: number }) => {
           <img
             src={user!.profile.imageUrl || defaultPicture}
             alt="profile picture"
-            className="h-10 w-10 min-w-max rounded-full"
+            className="h-10 w-10 min-w-10 object-cover rounded-full"
           />
         </Link>
 
@@ -191,7 +191,7 @@ const Comments = ({ postId }: { postId: number }) => {
                     <img
                       src={comment.author.profile.imageUrl || defaultPicture}
                       alt="profile picture"
-                      className="h-10 w-10 min-w-max rounded-full"
+                      className="h-10 w-10 min-w-10 object-cover rounded-full"
                     />
                   </Link>
                   <div className="flex flex-1 flex-col gap-2">
