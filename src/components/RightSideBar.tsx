@@ -18,7 +18,7 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
       try {
         const headers = await getAuthHeaders();
         const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/users${currentUserId ? "?excludeUserId=" + currentUserId : ""}`,
+          `${import.meta.env.VITE_API_BASE_URL}/users?userCount=3&${currentUserId ? "excludeUserId=" + currentUserId : ""}`,
           {
             method: "GET",
             headers: headers,
@@ -148,7 +148,7 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
           error || <ComponentLoader />
         )}
         <div className="rounded-b-2xl p-4 text-sky-700 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100">
-          <Link to="#">Show More</Link>
+          <Link to="/connect">Show More</Link>
         </div>
       </section>
     </section>

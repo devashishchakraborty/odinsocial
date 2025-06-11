@@ -100,7 +100,7 @@ const Users = ({ type }: { type: "followers" | "following" }) => {
                 <img
                   src={_user.profile.imageUrl || defaultPicture}
                   alt={_user.name}
-                  className="h-10 w-10 min-w-max rounded-full"
+                  className="h-10 w-10 min-w-10 rounded-full object-cover"
                 />
                 <div>
                   <div className="font-bold">{_user.name}</div>
