@@ -18,28 +18,32 @@ const Posts = ({
   showFollowingPosts,
   userId,
   showBookmarks,
-  searchQuery,
+  searchQueryBookmarks,
   newPosts = null,
+  searchQueryAll
 }: {
   showFollowingPosts?: boolean;
   userId?: number;
   showBookmarks?: boolean;
-  searchQuery?: string;
+  searchQueryBookmarks?: string;
   newPosts?: Post[] | null;
+  searchQueryAll?: string;
 }) => {
   const { getAuthHeaders, user } = useContext(AuthContext);
-  const [posts, setPosts] = useState<Post[] | null>(newPosts);
+
+  // To add newly created posts by the current user.
+  const [posts, setPosts] = useState<Post[] | null>(newPosts); 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const filteredPosts = useMemo(() => {
-    if (searchQuery && showBookmarks && posts) {
+    if (searchQueryBookmarks && showBookmarks && posts) {
       return posts.filter((post) =>
-        post.content.toLowerCase().includes(searchQuery.toLowerCase()),
+        post.content.toLowerCase().includes(searchQueryBookmarks.toLowerCase()),
       );
     }
     return posts;
-  }, [posts, searchQuery, showBookmarks]);
+  }, [posts, searchQueryBookmarks, showBookmarks]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,13 +55,11 @@ const Posts = ({
 
       try {
         // Applying different filters based on the page user has opened
-        const filter: string = userId
-          ? `userId=${userId}`
-          : showBookmarks
-            ? `showBookmarks=${showBookmarks}`
-            : showFollowingPosts
-              ? `following=${showFollowingPosts}`
-              : "";
+        let filter = "";
+        if (userId) filter = `userId=${userId}`
+        else if (showBookmarks) filter = `showBookmarks=${showBookmarks}`
+        else if (showFollowingPosts) filter = `following=${showFollowingPosts}`
+        else if (searchQueryAll) filter = `search=${searchQueryAll}`
 
         const headers = await getAuthHeaders();
         const response = await fetch(

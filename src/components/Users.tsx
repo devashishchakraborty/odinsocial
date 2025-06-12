@@ -5,7 +5,13 @@ import { User } from "../types";
 import ComponentLoader from "./ComponentLoader";
 import defaultPicture from "../assets/defaultPicture.png";
 
-const Users = ({ type }: { type: "followers" | "following" }) => {
+const Users = ({
+  type,
+  searchQuery,
+}: {
+  type?: "followers" | "following";
+  searchQuery?: string;
+}) => {
   const [error, setError] = useState(null);
   const [users, setUsers] = useState<User[] | null>(null);
   const { user, getAuthHeaders } = useContext(AuthContext);
@@ -16,14 +22,15 @@ const Users = ({ type }: { type: "followers" | "following" }) => {
       setUsers(null);
 
       try {
+        const filter = searchQuery ? `?search=${searchQuery}` : "";
+        const route = type && userId ? `/${userId}/${type}` : "";
+        const url = `${import.meta.env.VITE_API_BASE_URL}/users${route}${filter}`;
+
         const headers = await getAuthHeaders();
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/users/${userId}/${type}`,
-          {
-            method: "GET",
-            headers: headers,
-          },
-        );
+        const response = await fetch(url, {
+          method: "GET",
+          headers: headers,
+        });
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -88,7 +95,7 @@ const Users = ({ type }: { type: "followers" | "following" }) => {
     <section className="w-full">
       {users ? (
         users.length === 0 ? (
-          <div className="p-4 text-center">Its Empty Here!</div>
+          <div className="p-4 text-center">No Users found!</div>
         ) : (
           users.map((_user) => {
             return (
