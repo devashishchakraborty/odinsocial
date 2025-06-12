@@ -42,7 +42,7 @@ const Users = ({
       }
     };
     fetchUsers();
-  }, [userId, type]);
+  }, [userId, type, searchQuery]);
 
   const toggleFollow = async (
     e: MouseEvent,

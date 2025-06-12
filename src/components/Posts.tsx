@@ -80,7 +80,7 @@ const Posts = ({
       }
     };
     fetchPosts();
-  }, [showFollowingPosts, newPosts]);
+  }, [showFollowingPosts, newPosts, searchQueryAll]);
 
   const handleUserClick = (e: MouseEvent, authorId: number) => {
     e.stopPropagation(); // Prevent parent <Link> navigation
