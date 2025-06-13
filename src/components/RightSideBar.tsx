@@ -147,9 +147,14 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
         ) : (
           error || <ComponentLoader />
         )}
-        <div className="rounded-b-2xl p-4 text-sky-700 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100">
-          <Link to="/connect">Show More</Link>
-        </div>
+        {users && users.length > 3 && (
+          <Link
+            to="/connect"
+            className="flex items-center justify-between gap-2 rounded-b-2xl p-4 text-sky-600 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+          >
+            Show More
+          </Link>
+        )}
       </section>
     </section>
   );
