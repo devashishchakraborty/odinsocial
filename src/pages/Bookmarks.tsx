@@ -4,6 +4,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import RightSideBar from "../components/RightSideBar";
 const Bookmarks = () => {
   const [searchQuery, setSearchQuery] = useState("");
   return (
@@ -16,8 +17,8 @@ const Bookmarks = () => {
           </Link>
           Bookmarks
         </div>
-        <div className="p-4 relative border-b-1 border-gray-400">
-          <MagnifyingGlassIcon className="h-6 w-6 absolute text-gray-700 top-1/2 -translate-y-1/2 left-6"/>
+        <div className="relative border-b-1 border-gray-400 p-4">
+          <MagnifyingGlassIcon className="absolute top-1/2 left-6 h-6 w-6 -translate-y-1/2 text-gray-700" />
           <input
             id="search"
             name="search"
@@ -25,11 +26,12 @@ const Bookmarks = () => {
             placeholder="Search bookmarks"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="text-md w-full rounded-full bg-gray-200 pr-4 pl-11 py-2 outline-2 outline-gray-300 focus:bg-white"
+            className="text-md w-full rounded-full bg-gray-200 py-2 pr-4 pl-11 outline-2 outline-gray-300 focus:bg-white"
           />
         </div>
-        <Posts showBookmarks={true} searchQuery={searchQuery} />
+        <Posts showBookmarks={true} searchQueryBookmarks={searchQuery} />
       </section>
+      <RightSideBar />
     </main>
   );
 };

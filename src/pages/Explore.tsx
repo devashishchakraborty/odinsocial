@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Posts from "../components/Posts";
 import Users from "../components/Users";
 import { useRef, useState } from "react";
+import RightSideBar from "../components/RightSideBar";
 const Explore = () => {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,6 +40,7 @@ const Explore = () => {
           </>
         )}
       </section>
+      <RightSideBar />
     </main>
   );
 };
