@@ -120,14 +120,14 @@ const AuthProvider = ({ children }: ProviderPropsType) => {
         },
       );
 
+      const data = await response.json();
       if (!response.ok) {
         if (response.status === 401) {
           logout();
         }
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}. ${data.message}`);
       }
 
-      const data = await response.json();
       return data.accessToken;
     } catch (err) {
       console.error("Error fetching data:", err);
