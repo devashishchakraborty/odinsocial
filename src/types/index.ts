@@ -12,6 +12,19 @@ export interface User {
   };
   followers?: { id: number }[];
   following?: { id: number }[];
+  messagesSent?: Message[];
+  messagesReceived?: Message[];
+  latestMessage?: Message;
+}
+
+export interface Message {
+  id: number;
+  createdAt: Date;
+  text: string;
+  authorId: number;
+  receiverId: number;
+  author?: User;
+  receiver?: User;
 }
 
 export interface Post {
