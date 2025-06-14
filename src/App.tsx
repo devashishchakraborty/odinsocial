@@ -7,7 +7,6 @@ import { AuthContext } from "./context/AuthContext";
 import Home from "./pages/Home";
 import PageLoader from "./components/PageLoader";
 import Explore from "./pages/Explore";
-import Messages from "./pages/Messages";
 import Bookmarks from "./pages/Bookmarks";
 import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
@@ -17,6 +16,7 @@ import Followers from "./pages/Followers";
 import Following from "./pages/Following";
 import EditProfile from "./pages/EditProfile";
 import Connect from "./pages/Connect";
+import Chat from "./pages/Chat";
 
 const PublicRoute = () => {
   const { isAuthenticated, isAuthenticating } = useContext(AuthContext);
@@ -53,7 +53,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/messages" element={<Messages />} />
+        <Route path="/messages" element={<Chat />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/connect" element={<Connect />} />

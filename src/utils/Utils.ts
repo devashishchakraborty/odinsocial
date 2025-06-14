@@ -50,4 +50,10 @@ const formatDate = (_date: Date) => {
   return `${formattedHours}:${formattedMinutes} ${ampm} · ${month} ${day}, ${year}`;
 }
 
-export { getTimeDifference, convertTimestampToDate, formatDate };
+const clipText = (text: string) => {
+  if (text.length <= 30) return text;
+  return text.slice(0, 30) + "...";
+};
+
+
+export { getTimeDifference, convertTimestampToDate, formatDate, clipText };
