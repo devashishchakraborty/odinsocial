@@ -104,12 +104,12 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
           users.length === 0 ? (
             <div className="p-4">No Users left to follow!</div>
           ) : (
-            users.map((_user) => {
+            users.map((_user, index) => {
               return (
                 <Link
                   to={`/user/${_user.id}`}
                   key={_user.id}
-                  className="flex items-center justify-between gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                  className={`flex ${index === users.length - 1 && "rounded-b-2xl"} items-center justify-between gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100`}
                 >
                   <div className="flex gap-2">
                     <img
