@@ -29,8 +29,8 @@ const Login = () => {
 
   return (
     <>
-      <main className="flex min-h-full items-center justify-center p-4 text-lg w-full gap-10">
-        <section className="hidden flex-col gap-4 text-lg lg:flex  ml-4">
+      <main className="flex min-h-full w-full items-center justify-center gap-10 p-4 text-lg">
+        <section className="ml-4 hidden flex-col gap-4 text-lg lg:flex">
           <section>
             <h1 className="mb-8 font-['Cinzel'] text-5xl font-bold text-sky-800">
               OdinSocial
@@ -45,7 +45,7 @@ const Login = () => {
             <h2 className="mb-4 text-3xl font-bold text-sky-700">
               What You Can Do on OdinSocial
             </h2>
-            <ul className="flex list-disc flex-col gap-4 ">
+            <ul className="flex list-disc flex-col gap-4">
               <li>
                 <h3 className="text-xl font-bold text-sky-700">
                   Build Your Network
@@ -77,16 +77,14 @@ const Login = () => {
             </ul>
           </section>
         </section>
-        <section className="flex flex-col items-center flex-1 lg:min-w-md lg:flex-0">
-          <h1 className="mb-4 hidden text-2xl font-bold  lg:block">
-            Sign in
-          </h1>
+        <section className="flex flex-1 flex-col items-center lg:min-w-md lg:flex-0">
+          <h1 className="mb-4 hidden text-2xl font-bold lg:block">Sign in</h1>
           <h1 className="mb-4 font-['Cinzel'] text-4xl font-bold text-sky-800 lg:hidden">
             OdinSocial
           </h1>
-          <form onSubmit={handleLogin} className="relative flex flex-col gap-4">
+          <form onSubmit={handleLogin} className="relative flex flex-col gap-4 w-full sm:w-auto">
             <input
-              className="rounded-sm border-2 w-full border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
+              className="w-full rounded-sm border-2 border-gray-300 bg-gray-50 p-3 focus:border-sky-600 focus:bg-white focus:outline-0"
               type="text"
               name="email"
               placeholder="Email"
@@ -97,7 +95,7 @@ const Login = () => {
               required
             />
             <input
-              className="rounded-sm border-2 w-full border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
+              className="w-full rounded-sm border-2 border-gray-300 bg-gray-50 p-3 focus:border-sky-600 focus:bg-white focus:outline-0"
               type="password"
               name="password"
               placeholder="Password"

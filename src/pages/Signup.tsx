@@ -54,7 +54,7 @@ const SignUp = () => {
             className="relative flex w-full flex-col gap-4 sm:w-md"
           >
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
+              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 focus:border-sky-600 focus:bg-white focus:outline-0"
               type="text"
               name="name"
               placeholder="Fullname"
@@ -65,7 +65,7 @@ const SignUp = () => {
               required
             />
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
+              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 focus:border-sky-600 focus:bg-white focus:outline-0"
               type="email"
               name="email"
               placeholder="Email"
@@ -78,7 +78,7 @@ const SignUp = () => {
             />
 
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
+              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 focus:border-sky-600 focus:bg-white focus:outline-0"
               type="password"
               name="password"
               placeholder="Password"
@@ -90,7 +90,7 @@ const SignUp = () => {
             />
             <div className="relative">
               <input
-                className="w-full rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
+                className="w-full rounded-sm border-2 border-gray-300 bg-gray-50 p-3 focus:border-sky-600 focus:bg-white focus:outline-0"
                 type="password"
                 name="retypePassword"
                 placeholder="Retype Password"
