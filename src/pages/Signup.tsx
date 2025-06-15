@@ -41,19 +41,20 @@ const SignUp = () => {
 
   return (
     <>
-      <main className="flex h-full flex-col items-center justify-center p-4 text-lg sm:px-16 xl:px-32">
-        <section className="flex flex-col items-center">
-          <h1 className="mb-4 text-5xl font-bold text-sky-700">OdinSocial</h1>
-
+      <main className="flex h-full w-full flex-col items-center justify-center p-4 text-lg">
+        <section className="flex w-full flex-col items-center">
+          <h1 className="mb-4 font-['Cinzel'] text-4xl font-bold text-sky-800">
+            OdinSocial
+          </h1>
           <h1 className="mb-4 text-xl font-bold text-gray-600">
-            Sign up to create and share posts to your friends
+            Sign up to create and share posts
           </h1>
           <form
             onSubmit={createNewUser}
-            className="relative flex min-w-3/4 flex-col gap-4 sm:max-w-xl sm:min-w-lg"
+            className="relative flex w-full flex-col gap-4 sm:w-md"
           >
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white sm:p-4"
+              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
               type="text"
               name="name"
               placeholder="Fullname"
@@ -64,7 +65,7 @@ const SignUp = () => {
               required
             />
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white sm:p-4"
+              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
               type="email"
               name="email"
               placeholder="Email"
@@ -77,7 +78,7 @@ const SignUp = () => {
             />
 
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white sm:p-4"
+              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
               type="password"
               name="password"
               placeholder="Password"
@@ -89,7 +90,7 @@ const SignUp = () => {
             />
             <div className="relative">
               <input
-                className="w-full rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white sm:p-4"
+                className="w-full rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
                 type="password"
                 name="retypePassword"
                 placeholder="Retype Password"
