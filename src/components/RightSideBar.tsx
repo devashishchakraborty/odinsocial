@@ -85,8 +85,8 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
   };
 
   return (
-    <section className="sticky top-0 h-screen overflow-y-auto p-4">
-      <form className="relative mb-4">
+    <section className="sticky top-0 h-screen overflow-y-auto p-4 max-w-sm flex-1 hidden lg:block">
+      <form className="relative mb-4 flex">
         <MagnifyingGlassIcon className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-700" />
         <input
           id="search"
