@@ -25,12 +25,12 @@ const Login = () => {
     } else {
       setLoginError(response.error.message);
     }
-  }
+  };
 
   return (
     <>
-      <main className="flex h-full items-center justify-center p-4 text-lg sm:px-16 lg:gap-8 xl:gap-16 xl:px-32">
-        <section className="hidden flex-col gap-4 text-lg lg:flex">
+      <main className="flex min-h-full items-center justify-center p-4 text-lg w-full gap-10">
+        <section className="hidden flex-col gap-4 text-lg lg:flex  ml-4">
           <section>
             <h1 className="mb-8 font-['Cinzel'] text-5xl font-bold text-sky-800">
               OdinSocial
@@ -45,7 +45,7 @@ const Login = () => {
             <h2 className="mb-4 text-3xl font-bold text-sky-700">
               What You Can Do on OdinSocial
             </h2>
-            <ul className="flex list-disc flex-col gap-4">
+            <ul className="flex list-disc flex-col gap-4 ">
               <li>
                 <h3 className="text-xl font-bold text-sky-700">
                   Build Your Network
@@ -77,19 +77,16 @@ const Login = () => {
             </ul>
           </section>
         </section>
-        <section className="flex flex-col items-center">
-          <h1 className="mb-4 hidden text-2xl font-bold sm:text-3xl lg:block">
+        <section className="flex flex-col items-center flex-1 lg:min-w-md lg:flex-0">
+          <h1 className="mb-4 hidden text-2xl font-bold  lg:block">
             Sign in
           </h1>
           <h1 className="mb-4 font-['Cinzel'] text-4xl font-bold text-sky-800 lg:hidden">
             OdinSocial
           </h1>
-          <form
-            onSubmit={handleLogin}
-            className="relative flex min-w-3/4 flex-col gap-4 sm:max-w-xl sm:min-w-lg"
-          >
+          <form onSubmit={handleLogin} className="relative flex flex-col gap-4">
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white sm:p-4"
+              className="rounded-sm border-2 w-full border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
               type="text"
               name="email"
               placeholder="Email"
@@ -100,7 +97,7 @@ const Login = () => {
               required
             />
             <input
-              className="rounded-sm border-2 border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white sm:p-4"
+              className="rounded-sm border-2 w-full border-gray-300 bg-gray-50 p-3 outline-sky-600 focus:bg-white"
               type="password"
               name="password"
               placeholder="Password"
