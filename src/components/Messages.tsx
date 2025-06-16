@@ -33,72 +33,69 @@ const Messages = ({
   const { user, getAuthHeaders } = useContext(AuthContext);
 
   useEffect(() => {
-    if (currentTexter) {
-      setMessages(null);
-      const fetchMessages = async () => {
-        try {
-          const headers = await getAuthHeaders();
-          const response = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/messages/texter/${currentTexter.id}`,
-            {
-              method: "GET",
-              headers,
-            },
-          );
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(
-              `HTTP error! Status: ${response.status}. ${data.message}`,
-            );
-          }
-          setMessages(data);
-        } catch (err: any) {
-          console.error("Error fetching data:", err);
-          setError(err.message);
-        }
-      };
-      fetchMessages();
-
-      if (!socket.current) {
-        socket.current = io(import.meta.env.VITE_API_BASE_URL, {
-          auth: {
-            token: localStorage.getItem("auth_token"),
+    if (!currentTexter) return;
+    setMessages(null);
+    const fetchMessages = async () => {
+      try {
+        const headers = await getAuthHeaders();
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/messages/texter/${currentTexter.id}`,
+          {
+            method: "GET",
+            headers,
           },
-          transports: ["websocket"],
-        });
-      }
-
-      socket.current.emit("join room", {
-        senderId: user!.id,
-        receiverId: currentTexter.id,
-      });
-
-      socket.current.on("receive message", (data) => {
-        if (currentTexter.id === data.authorId || user!.id === data.authorId) {
-          setMessages((prev) => (prev ? [data, ...prev] : [data]));
-        }
-        setUsers((prev) =>
-          prev
-            ? prev.map((user) =>
-                user.id === data.authorId || user.id === data.receiverId
-                  ? { ...user, latestMessage: data }
-                  : user,
-              )
-            : null,
         );
-      });
+        const data = await response.json();
 
-      socket.current.on("connect_error", (err) => {
-        console.error("Auth failed:", err.message);
-      });
+        if (!response.ok) {
+          throw new Error(
+            `HTTP error! Status: ${response.status}. ${data.message}`,
+          );
+        }
+        setMessages(data);
+      } catch (err: any) {
+        console.error("Error fetching data:", err);
+        setError(err.message);
+      }
+    };
+    fetchMessages();
 
-        return () => {
-          if (socket.current) {
-            socket.current.off("receive message");
-          }
-        };
-    } else setMessages(null);
+    socket.current = io(import.meta.env.VITE_API_BASE_URL, {
+      auth: {
+        token: localStorage.getItem("auth_token"),
+      },
+      transports: ["websocket"],
+    });
+
+    socket.current.emit("join room", {
+      senderId: user!.id,
+      receiverId: currentTexter.id,
+    });
+
+    socket.current.on("receive message", (data) => {
+      if (currentTexter.id === data.authorId || user!.id === data.authorId) {
+        setMessages((prev) => (prev ? [data, ...prev] : [data]));
+      }
+      setUsers((prev) =>
+        prev
+          ? prev.map((user) =>
+              user.id === data.authorId || user.id === data.receiverId
+                ? { ...user, latestMessage: data }
+                : user,
+            )
+          : null,
+      );
+    });
+
+    socket.current.on("connect_error", (err) => {
+      console.error("Auth failed:", err.message);
+    });
+
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+      }
+    };
   }, [user, currentTexter, setUsers, socket]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -122,7 +119,7 @@ const Messages = ({
 
   return (
     <section
-      className={`${currentTexter ? "flex" : "hidden"} flex-1 flex-col border-l-1 lg:border-l-0 xl:border-r-1 lg:flex border-gray-400`}
+      className={`${currentTexter ? "flex" : "hidden"} flex-1 flex-col border-l-1 border-gray-400 lg:flex lg:border-l-0 xl:border-r-1`}
     >
       {currentTexter ? (
         <>
@@ -196,7 +193,7 @@ const Messages = ({
         </>
       ) : (
         <div className="flex h-full items-center justify-center">
-          <div className="rounded-2xl bg-gray-200 px-3 p-1">
+          <div className="rounded-2xl bg-gray-200 p-1 px-3">
             Select a chat to start messaging
           </div>
         </div>
