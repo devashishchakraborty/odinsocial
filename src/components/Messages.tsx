@@ -93,16 +93,11 @@ const Messages = ({
         console.error("Auth failed:", err.message);
       });
 
-      return () => {
-        if (socket.current) {
-          socket.current.emit("leave room", {
-            senderId: user!.id,
-            receiverId: currentTexter.id,
-          });
-          socket.current.off("receive message");
-          socket.current.off("connect_error");
-        }
-      };
+        return () => {
+          if (socket.current) {
+            socket.current.off("receive message");
+          }
+        };
     } else setMessages(null);
   }, [user, currentTexter, setUsers, socket]);
 
