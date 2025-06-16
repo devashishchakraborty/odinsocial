@@ -8,6 +8,7 @@ import { User } from "../types";
 import ComponentLoader from "../components/ComponentLoader";
 import UploadImage from "../components/UploadImage";
 import defaultPicture from "../assets/defaultPicture.png";
+import RightSideBar from "../components/RightSideBar";
 
 const EditProfile = () => {
   const { user, getAuthHeaders } = useContext(AuthContext);
@@ -77,9 +78,9 @@ const EditProfile = () => {
   };
 
   return (
-    <main className="flex h-full px-30">
+    <main className="flex min-h-full flex-1 xl:px-16 2xl:px-32">
       <Sidebar />
-      <section className="w-xl border-x-1 border-gray-400 p-4">
+      <section className="max-w-xl flex-1/10 border-gray-400 p-4 sm:border-x-1">
         <div className="mb-2 flex items-center gap-2 text-xl font-bold text-sky-950">
           <Link
             to={`/user/${user!.id}`}
@@ -148,6 +149,7 @@ const EditProfile = () => {
         )}
         <div>{error}</div>
       </section>
+      <RightSideBar />
     </main>
   );
 };

@@ -50,7 +50,7 @@ const UploadImage = ({ url }: { url: string }) => {
       }
 
       setUploadUrl(data.url);
-      setPreviewUrl("")
+      setPreviewUrl("");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -85,20 +85,31 @@ const UploadImage = ({ url }: { url: string }) => {
         />
       </div>
       {previewUrl.length > 0 && (
-        <div className="absolute top-1 -right-2/3 flex flex-col items-center gap-2 rounded-2xl border-2 border-gray-400 p-4">
+        <div className="absolute top-0 z-1 flex flex-col items-center gap-4 rounded-sm border-2 border-gray-400 bg-white p-4">
           <div className="text-xl font-bold text-sky-900">Image Preview</div>
           <img
-            className="h-64 w-64 object-contain"
+            className="h-128 w-128 object-contain"
             src={previewUrl}
             alt="Preview"
           />
-          <button
-            onClick={handleUpload}
-            className="cursor-pointer gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
-            disabled={isUploading}
-          >
-            Save
-          </button>
+          <div className="flex gap-4">
+            <button
+              type="reset"
+              className="flex cursor-pointer items-center gap-2 rounded-4xl bg-gray-600 px-3 py-1 font-bold text-white hover:bg-gray-700 disabled:cursor-default disabled:bg-gray-400"
+              onClick={() => {
+                setPreviewUrl("");
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleUpload}
+              className="cursor-pointer gap-2 rounded-4xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700 disabled:cursor-default disabled:bg-sky-300"
+              disabled={isUploading}
+            >
+              Save
+            </button>
+          </div>
         </div>
       )}
       {error && <p className="text-sm text-red-600">{error}</p>}
