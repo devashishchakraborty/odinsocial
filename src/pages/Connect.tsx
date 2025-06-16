@@ -6,6 +6,8 @@ import { MouseEvent, useContext, useEffect, useState } from "react";
 import { User } from "../types";
 import { AuthContext } from "../context/AuthContext";
 import defaultPicture from "../assets/defaultPicture.png";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 const Connect = () => {
   const { getAuthHeaders, user } = useContext(AuthContext);
@@ -85,64 +87,70 @@ const Connect = () => {
   };
 
   return (
-    <main className="flex min-h-full flex-1 px-30">
-      <Sidebar />
-      <section className="w-xl border-x-1 border-gray-400">
-        <div className="flex items-center gap-2 px-4 py-2 text-xl font-bold text-sky-950">
-          <Link to={`/`} className="rounded-full p-2 hover:bg-gray-200">
-            <ArrowLeftIcon className="h-5 w-5" />
-          </Link>
-          Connect
-        </div>
-        <section className="w-full">
-          {users ? (
-            users.length === 0 ? (
-              <div className="p-4 text-center">Its Empty Here!</div>
-            ) : (
-              users.map((_user) => {
-                return (
-                  <Link
-                    to={`/user/${_user.id}`}
-                    key={_user.id}
-                    className="flex items-center gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
-                  >
-                    <img
-                      src={_user.profile.imageUrl || defaultPicture}
-                      alt={_user.name}
-                      className="h-10 w-10 min-w-10 rounded-full object-cover"
-                    />
-                    <div>
-                      <div className="font-bold">{_user.name}</div>
-                      <div className="text-gray-600">{_user.email}</div>
-                    </div>
-                    {user!.id !== _user.id &&
-                      (_user.followers?.some(
-                        (follower) => follower.id === user!.id,
-                      ) ? (
-                        <button
-                          className="ml-auto cursor-pointer rounded-3xl border-1 border-sky-900 bg-white px-4 py-2 font-bold text-sky-950 hover:bg-gray-100"
-                          onClick={(e) => toggleFollow(e, _user.id, "UNFOLLOW")}
+    <>
+      <Header />
+      <main className="flex min-h-full flex-1 xl:px-16 2xl:px-32">
+        <Sidebar />
+        <section className="max-w-2xl flex-1/10 border-gray-400 sm:border-x-1">
+          <div className="flex items-center gap-2 px-4 py-2 text-xl font-bold text-sky-950">
+            <Link to={`/`} className="rounded-full p-2 hover:bg-gray-200">
+              <ArrowLeftIcon className="h-5 w-5" />
+            </Link>
+            Connect
+          </div>
+          <section className="w-full">
+            {users ? (
+              users.length === 0 ? (
+                <div className="p-4 text-center">Its Empty Here!</div>
+              ) : (
+                users.map((_user) => {
+                  return (
+                    <Link
+                      to={`/user/${_user.id}`}
+                      key={_user.id}
+                      className="flex items-center gap-2 p-4 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                    >
+                      <img
+                        src={_user.profile.imageUrl || defaultPicture}
+                        alt={_user.name}
+                        className="h-10 w-10 min-w-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <div className="font-bold">{_user.name}</div>
+                        <div className="text-gray-600">{_user.email}</div>
+                      </div>
+                      {user!.id !== _user.id &&
+                        (_user.followers?.some(
+                          (follower) => follower.id === user!.id,
+                        ) ? (
+                          <button
+                            className="ml-auto cursor-pointer rounded-3xl border-1 border-sky-900 bg-white px-4 py-2 font-bold text-sky-950 hover:bg-gray-100"
+                            onClick={(e) =>
+                              toggleFollow(e, _user.id, "UNFOLLOW")
+                            }
                           >
-                          Following
-                        </button>
-                      ) : (
-                        <button
-                          className="ml-auto cursor-pointer rounded-3xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700"
-                          onClick={(e) => toggleFollow(e, _user.id, "FOLLOW")}
-                        >
-                          Follow
-                        </button>
-                      ))}
-                  </Link>
-                );
-              })
-            )
-          ) : (
-            error || <ComponentLoader />
-          )}
+                            Following
+                          </button>
+                        ) : (
+                          <button
+                            className="ml-auto cursor-pointer rounded-3xl bg-sky-600 px-4 py-2 font-bold text-white hover:bg-sky-700"
+                            onClick={(e) => toggleFollow(e, _user.id, "FOLLOW")}
+                          >
+                            Follow
+                          </button>
+                        ))}
+                    </Link>
+                  );
+                })
+              )
+            ) : (
+              error || <ComponentLoader />
+            )}
+          </section>
         </section>
-      </section>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 };
 
