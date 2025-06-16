@@ -68,12 +68,12 @@ const Reply = ({
         <img
           src={reply.author.profile.imageUrl || defaultPicture}
           alt="profile picture"
-          className="h-10 w-10 min-w-max rounded-full"
+          className="h-10 w-10 min-w-10 rounded-full object-cover"
         />
       </Link>
       <div className="flex flex-1 flex-col gap-2">
         <div className="flex flex-col items-start">
-          <Link to={`/user/${reply.authorId}`} className="flex gap-1">
+          <Link to={`/user/${reply.authorId}`} className="flex flex-wrap gap-1">
             <div className="font-bold hover:underline">{reply.author.name}</div>
             ·<div className="text-gray-600">{reply.author.email}</div>·
             <div className="text-gray-600">{diff}</div>
@@ -81,7 +81,7 @@ const Reply = ({
           <div>{reply.text}</div>
         </div>
 
-        <div className="flex w-sm items-center gap-10 text-gray-600 select-none">
+        <div className="flex items-center gap-10 text-gray-600 select-none">
           <div
             className="flex cursor-pointer items-center gap-1 hover:text-pink-700"
             title="Like"
