@@ -139,7 +139,7 @@ const Comments = ({ postId }: { postId: number }) => {
 
   return (
     <>
-      <section className="flex gap-2 border-b-1 border-gray-400 px-4 pt-2 pb-4">
+      <section className="flex gap-2 border-b-1 border-gray-400 px-4 pt-2 pb-4 w-full">
         <Link to={`/user/${user!.id}`}>
           <img
             src={user!.profile.imageUrl || defaultPicture}
@@ -156,7 +156,7 @@ const Comments = ({ postId }: { postId: number }) => {
           <textarea
             name="comment"
             id="comment"
-            className="field-sizing-content flex-1 resize-none p-2 text-lg focus:outline-0"
+            className="field-sizing-content flex-1 resize-none w-full p-2 text-lg focus:outline-0"
             placeholder="Add your comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
@@ -185,7 +185,7 @@ const Comments = ({ postId }: { postId: number }) => {
               return (
                 <section
                   key={comment.id}
-                  className="flex gap-2 border-b-1 border-gray-400 px-4 py-2"
+                  className="flex gap-2 w-full border-b-1 border-gray-400 px-4 py-2"
                 >
                   <Link to={`/user/${comment.authorId}`}>
                     <img
@@ -194,7 +194,7 @@ const Comments = ({ postId }: { postId: number }) => {
                       className="h-10 w-10 min-w-10 object-cover rounded-full"
                     />
                   </Link>
-                  <div className="flex flex-1 flex-col gap-2">
+                  <div className="flex flex-1 flex-col gap-2 w-full">
                     <div className="flex flex-col items-start">
                       <Link to={`/user/${comment.authorId}`} className="flex gap-1">
                         <div className="font-bold hover:underline">
@@ -209,7 +209,7 @@ const Comments = ({ postId }: { postId: number }) => {
                       <div>{comment.text}</div>
                     </div>
 
-                    <div className="flex w-sm items-center gap-10 text-gray-600 select-none">
+                    <div className="flex w-full items-center gap-10 text-gray-600 select-none">
                       <div
                         className="flex cursor-pointer items-center gap-1 hover:text-pink-700"
                         title="Like"

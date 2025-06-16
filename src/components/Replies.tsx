@@ -113,7 +113,7 @@ const Replies = ({
       )}
 
       {showReplyForm && (
-        <section className="flex gap-2 px-4 pt-2 pb-4">
+        <section className=" text-sm flex gap-2 px-4 pt-2 pb-4 w-full">
           <form
             action="#"
             className="relative flex flex-1 flex-col"
@@ -122,7 +122,7 @@ const Replies = ({
             <textarea
               name="reply"
               id="reply"
-              className="field-sizing-content flex-1 resize-none rounded-2xl p-2 pb-12 outline-2 outline-gray-300 focus:outline-gray-400"
+              className="field-sizing-content flex-1 w-full resize-none rounded-2xl p-2 pb-12 outline-2 outline-gray-300 focus:outline-gray-400"
               placeholder="Add your reply"
               value={newReply}
               onChange={(e) =>
@@ -160,7 +160,7 @@ const Replies = ({
       {showReplies ? (
         replies ? (
           replies.map((reply: ReplyType) => (
-            <Reply reply={reply} setReplies={setReplies} />
+            <Reply reply={reply} setReplies={setReplies} key={reply.id}/>
           ))
         ) : (
           <SmallLoader />
@@ -168,7 +168,7 @@ const Replies = ({
       ) : (
         newReplies &&
         newReplies.map((reply: ReplyType) => (
-          <Reply reply={reply} setReplies={setNewReplies} />
+          <Reply reply={reply} setReplies={setNewReplies} key={reply.id} />
         ))
       )}
     </>
