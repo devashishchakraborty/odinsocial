@@ -6,6 +6,7 @@ import { User } from "../types/index.ts";
 import { AuthContext } from "../context/AuthContext.tsx";
 import Sidebar from "../components/Sidebar.tsx";
 import defaultPicture from "../assets/defaultPicture.png";
+import Footer from "../components/Footer.tsx";
 
 const Chat = () => {
   const [users, setUsers] = useState<User[] | null>(null);
@@ -59,73 +60,76 @@ const Chat = () => {
   }
 
   return (
-    <main className="flex h-full px-30">
+    <>
+      <main className="flex min-h-full flex-1 xl:px-16 2xl:px-32 ">
       <Sidebar selected="messages" />
-      <section
-        className={`${currentTexter ? "hidden" : "flex"} h-full w-full min-w-xs flex-col sm:flex sm:w-sm sm:border-x-2 sm:border-gray-200`}
-      >
-        <section className="flex h-16 items-center gap-4 border-b-2 border-b-gray-200 p-2 pr-4">
-          <input
-            id="search"
-            name="search"
-            type="text"
-            placeholder="Search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="text-md w-full rounded-full bg-gray-200 px-4 py-1 outline-2 outline-gray-200 focus:bg-white"
-          />
-        </section>
-        <section className="flex flex-col overflow-auto">
-          {filteredUsers ? (
-            filteredUsers.length > 0 &&
-            filteredUsers.map((texter) => {
-              return (
-                <section
-                  className={`flex ${currentTexter?.id == texter.id && "bg-sky-600 hover:bg-sky-600"} cursor-pointer items-center gap-4 border-b-2 border-b-gray-200 px-4 py-2 hover:bg-gray-200`}
-                  key={texter.id}
-                  onClick={() => setCurrentTexter(texter)}
-                >
-                  <div>
-                    <img
-                      src={texter.profile.imageUrl || defaultPicture}
-                      alt="Profile picture"
-                      className="h-10 w-10 min-w-10 rounded-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <div
-                      className={`font-bold ${currentTexter?.id == texter.id && "text-white"} `}
-                    >
-                      {texter.name}
+        <section
+          className={`${currentTexter ? "hidden" : "flex"} min-h-full flex-1 lg:max-w-sm flex-col lg:flex lg:border-x-1 border-gray-400 sm:border-l-1`}
+        >
+          <section className="flex h-16 items-center gap-4 border-b-1 border-gray-400 p-4">
+            <input
+              id="search"
+              name="search"
+              type="text"
+              placeholder="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="text-md w-full rounded-full bg-gray-200 px-4 py-1 outline-2 outline-gray-200 focus:bg-white"
+            />
+          </section>
+          <section className="flex flex-col overflow-auto">
+            {filteredUsers ? (
+              filteredUsers.length > 0 &&
+              filteredUsers.map((texter) => {
+                return (
+                  <section
+                    className={`flex ${currentTexter?.id == texter.id ? "bg-sky-600" : "hover:bg-gray-200"} cursor-pointer items-center gap-4 border-b-1 border-gray-400 px-4 py-2`}
+                    key={texter.id}
+                    onClick={() => setCurrentTexter(texter)}
+                  >
+                    <div>
+                      <img
+                        src={texter.profile.imageUrl || defaultPicture}
+                        alt="Profile picture"
+                        className="h-10 w-10 min-w-10 rounded-full object-cover"
+                      />
                     </div>
-                    <div
-                      className={`text-gray-500 ${currentTexter?.id == texter.id && "text-white"}`}
-                    >
-                      {clipText(
-                        texter.latestMessage
-                          ? texter.latestMessage.authorId === texter.id
-                            ? texter.latestMessage.text
-                            : "You: " + texter.latestMessage.text
-                          : "Start a new chat!",
-                      )}
+                    <div className="flex flex-col">
+                      <div
+                        className={`font-bold ${currentTexter?.id == texter.id && "text-white"} `}
+                      >
+                        {texter.name}
+                      </div>
+                      <div
+                        className={`text-gray-500 ${currentTexter?.id == texter.id && "text-white"}`}
+                      >
+                        {clipText(
+                          texter.latestMessage
+                            ? texter.latestMessage.authorId === texter.id
+                              ? texter.latestMessage.text
+                              : "You: " + texter.latestMessage.text
+                            : "Start a new chat!",
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </section>
-              );
-            })
-          ) : (
-            <div className="flex justify-center p-8">
-              <Loading />
-            </div>
-          )}
+                  </section>
+                );
+              })
+            ) : (
+              <div className="flex justify-center p-8">
+                <Loading />
+              </div>
+            )}
+          </section>
         </section>
-      </section>
-      <Messages
-        currentTexter={currentTexter}
-        setUsers={setUsers}
-        setCurrentTexter={setCurrentTexter}
-      />
-    </main>
+        <Messages
+          currentTexter={currentTexter}
+          setUsers={setUsers}
+          setCurrentTexter={setCurrentTexter}
+        />
+      </main>
+      {!currentTexter && <Footer selected="messages" />}
+    </>
   );
 };
 

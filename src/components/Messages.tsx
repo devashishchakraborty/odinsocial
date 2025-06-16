@@ -127,24 +127,24 @@ const Messages = ({
 
   return (
     <section
-      className={`${currentTexter ? "flex" : "hidden"} flex-1 flex-col sm:flex border-r-2 sm:border-gray-200`}
+      className={`${currentTexter ? "flex" : "hidden"} flex-1 flex-col border-l-1 lg:border-l-0 xl:border-r-1 lg:flex border-gray-400`}
     >
       {currentTexter ? (
         <>
-          <section className="flex h-16 items-center gap-4 border-b-2 border-b-gray-200 px-4 py-2">
+          <section className="flex h-16 items-center gap-4 border-b-1 border-gray-400 px-4 py-2">
             <div
-              className="cursor-pointer rounded-full p-2 text-xl hover:bg-gray-200 sm:hidden"
+              className="cursor-pointer rounded-full p-2 text-xl hover:bg-gray-200 lg:hidden"
               onClick={() => setCurrentTexter(null)}
             >
-              <ArrowLeftIcon />
+              <ArrowLeftIcon className="h-5 w-5" />
             </div>
-            <Link to={`profile/${currentTexter.id}`}>
+            <Link to={`/user/${currentTexter.id}`}>
               <div className="font-bold">{currentTexter.name}</div>
               <div className="text-sm text-gray-500">{currentTexter.email}</div>
             </Link>
           </section>
 
-          <section className="flex flex-1 flex-col-reverse gap-2 overflow-auto p-4 md:px-10">
+          <section className="flex flex-1 flex-col-reverse gap-2 overflow-auto p-2">
             {messages ? (
               messages.length > 0 &&
               messages.map((message) => {
@@ -176,11 +176,11 @@ const Messages = ({
           <section>
             <form
               action="#"
-              className="relative flex gap-4 border-t-2 border-t-gray-200 p-4"
+              className="relative flex gap-4 border-t-1 border-gray-400 p-4"
               onSubmit={handleMessageSubmit}
             >
               <textarea
-                className="flex-1 resize-none rounded-sm bg-gray-100 p-2 outline-2 outline-gray-200 focus:bg-gray-50"
+                className="w-full flex-1 resize-none rounded-sm bg-gray-100 p-2 outline-2 outline-gray-200 focus:bg-gray-50"
                 name="message"
                 id="message"
                 placeholder="Write your message here!"
@@ -194,14 +194,14 @@ const Messages = ({
                 className="cursor-pointer rounded-full p-2 text-3xl text-sky-600 hover:bg-gray-200"
                 type="submit"
               >
-                <PaperAirplaneIcon className="h-8 w-8"/>
+                <PaperAirplaneIcon className="h-8 w-8" />
               </button>
             </form>
           </section>
         </>
       ) : (
         <div className="flex h-full items-center justify-center">
-          <div className="rounded-2xl bg-gray-200 px-3 py-1">
+          <div className="rounded-2xl bg-gray-200 px-3 p-1">
             Select a chat to start messaging
           </div>
         </div>
