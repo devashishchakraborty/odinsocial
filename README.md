@@ -1,54 +1,78 @@
-# React + TypeScript + Vite
+# OdinSocial
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+OdinSocial is a **Twitter‑style social media application**. This repository contains only the **front‑end**  code that powers the web client.
 
-Currently, two official plugins are available:
+> **Backend repo:** [devashishchakraborty/odinsocial‑backend](https://github.com/devashishchakraborty/odinsocial‑backend)  
+> **Live Link:** [https://odinsocial.pages.dev](https://odinsocial.pages.dev)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Key Features
 
-## Expanding the ESLint configuration
+| Area | What you can do |
+| --- | --- |
+| **Posts** | Create & like posts |
+| **Comments & Replies** | Comment on posts and reply to comments for rich conversations |
+| **Real‑time chat** | 1‑to‑1 messaging via WebSockets (Socket.IO) |
+| **Bookmarks** | Save posts for later in a personal list |
+| **Profiles** | View any user’s profile, bio & posts |
+| **Profile editing** | Update bio, name, & **upload a new image** |
+| **Follow system** | Follow / unfollow users & see counts instantly |
+| **Explore** | Search users & posts with dynamic filters |
+| **Responsive UI** | Mobile‑first layout, smooth animations |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Libraries & Tools |
+| --- | --- |
+| **Core** | [React](https://react.dev/), [Vite](https://vitejs.dev/), TypeScript |
+| **Routing** | `react‑router‑dom` |
+| **State** | React Context API + `useReducer`, `useState` |
+| **Real‑time** | `socket.io‑client` |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/)|
+
+---
+
+## Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/devashishchakraborty/odinsocial.git
+cd odinsocial
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm install
 ```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root and add:
+
+```env
+VITE_API_BASE_URL="http://localhost:3000"
+```
+
+Update the URL based on your backend deployment/local setup.
+
+### 4. Run the App
+
+```bash
+npm run dev
+```
+
+App will run at `http://localhost:5173` by default.
+
+---
+
+## Future Enhancements
+
+- Media Upload in Posts
+- Group Chat
+- File sharing in chats
+- Making Notifications Section functional
+- Adding Delete and Edit functionality to posts
