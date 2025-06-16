@@ -2,7 +2,7 @@
 
 OdinSocial is a **Twitter‑style social media application**. This repository contains only the **front‑end**  code that powers the web client.
 
-> **Backend repo:** [devashishchakraborty/odinsocial‑backend](https://github.com/devashishchakraborty/odinsocial‑backend)  
+> **Backend repo:** [devashishchakraborty/odinsocial‑backend](https://github.com/devashishchakraborty/odinsocial-backend)  
 > **Live Link:** [https://odinsocial.pages.dev](https://odinsocial.pages.dev)
 
 ## ✨ Key Features
