@@ -45,10 +45,10 @@ const MainFeed = () => {
   };
 
   return (
-    <section className="relative w-xl border-x-1 border-gray-400">
+    <section className="relative sm:border-x-1 border-gray-400 flex-1/10">
       <section className="sticky top-0 flex border-b-1 border-gray-400 bg-white">
         <div
-          className={`flex-1 border-r-1 border-gray-400 p-4 ${showFollowingPosts || "font-bold"} text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
+          className={`flex-1 md:border-r-1 border-gray-400 p-4 ${showFollowingPosts || "font-bold"} text-center transition-colors duration-200 hover:cursor-pointer hover:bg-gray-200`}
           onClick={() => setShowFollowingPosts(false)}
         >
           All Posts
@@ -71,7 +71,7 @@ const MainFeed = () => {
           <img
             src={user!.profile.imageUrl || defaultPicture}
             alt="profile picture"
-            className="h-10 w-10 min-w-max rounded-full"
+            className="h-10 w-10 min-w-10 rounded-full object-cover"
           />
         </Link>
 
@@ -83,7 +83,7 @@ const MainFeed = () => {
           <textarea
             name="post"
             id="post"
-            className="field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
+            className="w-full field-sizing-content flex-1 resize-none p-2 text-xl focus:outline-0"
             placeholder="Write your post here"
             value={newPost}
             onChange={(e) => setNewPost(e.target.value)}

@@ -11,6 +11,7 @@ import {
   BookmarkIcon as BookmarkIconOutline,
   ChatBubbleOvalLeftIcon as CommentIcon,
   ArrowPathRoundedSquareIcon as RepostIcon,
+  ChartBarIcon,
 } from "@heroicons/react/24/outline";
 
 // Using this component for multiple use cases like bookmarks, following Posts, user posts etc.
@@ -20,7 +21,7 @@ const Posts = ({
   showBookmarks,
   searchQueryBookmarks,
   newPosts = null,
-  searchQueryAll
+  searchQueryAll,
 }: {
   showFollowingPosts?: boolean;
   userId?: number;
@@ -32,7 +33,7 @@ const Posts = ({
   const { getAuthHeaders, user } = useContext(AuthContext);
 
   // To add newly created posts by the current user.
-  const [posts, setPosts] = useState<Post[] | null>(newPosts); 
+  const [posts, setPosts] = useState<Post[] | null>(newPosts);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -49,17 +50,17 @@ const Posts = ({
     const fetchPosts = async () => {
       if (newPosts && posts) {
         setPosts([...newPosts, ...posts]);
-        return
+        return;
       }
       setPosts(null);
 
       try {
         // Applying different filters based on the page user has opened
         let filter = "";
-        if (userId) filter = `userId=${userId}`
-        else if (showBookmarks) filter = `showBookmarks=${showBookmarks}`
-        else if (showFollowingPosts) filter = `following=${showFollowingPosts}`
-        else if (searchQueryAll) filter = `search=${searchQueryAll}`
+        if (userId) filter = `userId=${userId}`;
+        else if (showBookmarks) filter = `showBookmarks=${showBookmarks}`;
+        else if (showFollowingPosts) filter = `following=${showFollowingPosts}`;
+        else if (searchQueryAll) filter = `search=${searchQueryAll}`;
 
         const headers = await getAuthHeaders();
         const response = await fetch(
@@ -155,7 +156,7 @@ const Posts = ({
               <section
                 onClick={() => navigate(`/post/${post.id}`)}
                 key={post.id}
-                className="flex gap-2 border-b-1 border-gray-400 px-4 py-2 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
+                className="flex w-full gap-2 border-b-1 border-gray-400 px-4 py-2 transition-colors duration-200 hover:cursor-pointer hover:bg-gray-100"
               >
                 <div onClick={(e) => handleUserClick(e, post.author.id)}>
                   <img
@@ -179,8 +180,8 @@ const Posts = ({
                     <div>{post.content}</div>
                   </div>
 
-                  <div className="flex items-center justify-between text-gray-600">
-                    <div className="flex w-sm items-center justify-between gap-10 select-none">
+                  <div className="flex items-center justify-between gap-4 text-gray-600">
+                    <div className="flex w-full items-center justify-between gap-5 select-none">
                       <div
                         className="flex items-center gap-1 hover:text-pink-700"
                         title="Like"
@@ -220,23 +221,32 @@ const Posts = ({
                         />
                         0
                       </div>
+                      <div
+                        className="flex items-center gap-1 hover:text-sky-700"
+                        title="Engagement"
+                      >
+                        <ChartBarIcon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        {post.bookmarkedBy.some(
+                          (obj) => obj.id === user!.id,
+                        ) ? (
+                          <BookmarkIcon
+                            className="h-5 w-5 text-sky-600 hover:text-sky-700"
+                            onClick={(e) =>
+                              handlePostUpdate(e, post.id, null, "false")
+                            }
+                          />
+                        ) : (
+                          <BookmarkIconOutline
+                            className="h-5 w-5 hover:text-sky-700"
+                            onClick={(e) =>
+                              handlePostUpdate(e, post.id, null, "true")
+                            }
+                          />
+                        )}
+                      </div>
                     </div>
-
-                    {post.bookmarkedBy.some((obj) => obj.id === user!.id) ? (
-                      <BookmarkIcon
-                        className="h-5 w-5 text-sky-600 hover:text-sky-700"
-                        onClick={(e) =>
-                          handlePostUpdate(e, post.id, null, "false")
-                        }
-                      />
-                    ) : (
-                      <BookmarkIconOutline
-                        className="h-5 w-5 hover:text-sky-700"
-                        onClick={(e) =>
-                          handlePostUpdate(e, post.id, null, "true")
-                        }
-                      />
-                    )}
                   </div>
                 </div>
               </section>
