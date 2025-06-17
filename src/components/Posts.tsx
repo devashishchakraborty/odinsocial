@@ -175,7 +175,7 @@ const Posts = ({
                       <div className="font-bold hover:underline">
                         {clipText(post.author.name)}
                       </div>
-                      ·<div className="text-gray-600">clipText(post.author.email)</div>·
+                      ·<div className="text-gray-600">{clipText(post.author.email)}</div>·
                       <div className="text-gray-600">{diff}</div>
                     </div>
                     <div>{post.content}</div>
