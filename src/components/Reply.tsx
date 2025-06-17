@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Reply as ReplyType } from "../types";
 import { Link } from "react-router-dom";
 import defaultPicture from "../assets/defaultPicture.png";
-import { getTimeDifference } from "../utils/Utils";
+import { clipText, getTimeDifference } from "../utils/Utils";
 import { HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as LikeIconOutline } from "@heroicons/react/24/outline";
 
@@ -74,8 +74,8 @@ const Reply = ({
       <div className="flex flex-1 flex-col gap-2">
         <div className="flex flex-col items-start">
           <Link to={`/user/${reply.authorId}`} className="flex flex-wrap gap-1">
-            <div className="font-bold hover:underline">{reply.author.name}</div>
-            ·<div className="text-gray-600">{reply.author.email}</div>·
+            <div className="font-bold hover:underline">{clipText(reply.author.name)}</div>
+            ·<div className="text-gray-600">{clipText(reply.author.email)}</div>·
             <div className="text-gray-600">{diff}</div>
           </Link>
           <div>{reply.text}</div>

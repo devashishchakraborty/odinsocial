@@ -6,6 +6,7 @@ import PageLoader from "./PageLoader";
 import { getTimeDifference } from "../utils/Utils";
 import { Post } from "../types";
 import { BookmarkIcon, HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
+import { clipText } from "../utils/Utils";
 import {
   HeartIcon as LikeIconOutline,
   BookmarkIcon as BookmarkIconOutline,
@@ -172,9 +173,9 @@ const Posts = ({
                       onClick={(e) => handleUserClick(e, post.author.id)}
                     >
                       <div className="font-bold hover:underline">
-                        {post.author.name}
+                        {clipText(post.author.name)}
                       </div>
-                      ·<div className="text-gray-600">{post.author.email}</div>·
+                      ·<div className="text-gray-600">clipText(post.author.email)</div>·
                       <div className="text-gray-600">{diff}</div>
                     </div>
                     <div>{post.content}</div>

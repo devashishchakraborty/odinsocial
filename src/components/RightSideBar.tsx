@@ -5,6 +5,7 @@ import defaultPicture from "../assets/defaultPicture.png";
 import ComponentLoader from "./ComponentLoader";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { clipText } from "../utils/Utils";
 
 const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,7 +86,7 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
   };
 
   return (
-    <section className="sticky top-0 h-screen overflow-y-auto p-4 max-w-sm flex-1 hidden lg:block">
+    <section className="sticky top-0 hidden h-screen max-w-sm flex-1 overflow-y-auto p-4 lg:block">
       <form className="relative mb-4 flex">
         <MagnifyingGlassIcon className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-700" />
         <input
@@ -118,8 +119,10 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
                       className="h-10 w-10 min-w-10 rounded-full object-cover"
                     />
                     <div>
-                      <div className="font-bold">{_user.name}</div>
-                      <div className="text-gray-600">{_user.email}</div>
+                      <div className="font-bold">{clipText(_user.name)}</div>
+                      <div className="text-gray-600">
+                        clipText({_user.email})
+                      </div>
                     </div>
                   </div>
 

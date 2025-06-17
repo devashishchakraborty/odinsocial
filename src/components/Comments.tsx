@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import defaultPicture from "../assets/defaultPicture.png";
 import { Link } from "react-router-dom";
 import PageLoader from "./PageLoader";
-import { getTimeDifference } from "../utils/Utils";
+import { clipText, getTimeDifference } from "../utils/Utils";
 import { Action, Comment } from "../types";
 import { HeartIcon as LikeIcon } from "@heroicons/react/24/solid";
 import {
@@ -198,11 +198,11 @@ const Comments = ({ postId }: { postId: number }) => {
                     <div className="flex flex-col items-start">
                       <Link to={`/user/${comment.authorId}`} className="flex gap-1">
                         <div className="font-bold hover:underline">
-                          {comment.author.name}
+                          {clipText(comment.author.name)}
                         </div>
                         ·
                         <div className="text-gray-600">
-                          {comment.author.email}
+                          {clipText(comment.author.email)}
                         </div>
                         ·<div className="text-gray-600">{diff}</div>
                       </Link>
