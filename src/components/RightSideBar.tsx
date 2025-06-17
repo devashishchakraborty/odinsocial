@@ -121,7 +121,7 @@ const RightSideBar = ({ currentUserId }: { currentUserId?: number }) => {
                     <div>
                       <div className="font-bold">{clipText(_user.name)}</div>
                       <div className="text-gray-600">
-                        clipText({_user.email})
+                        {clipText(_user.email)}
                       </div>
                     </div>
                   </div>
