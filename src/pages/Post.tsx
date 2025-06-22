@@ -17,6 +17,7 @@ import ComponentLoader from "../components/ComponentLoader";
 import { formatDate } from "../utils/Utils";
 import Comments from "../components/Comments";
 import RightSideBar from "../components/RightSideBar";
+import Footer from "../components/Footer";
 
 const Post = () => {
   const { postId } = useParams();
@@ -108,9 +109,9 @@ const Post = () => {
 
   return (
     <>
-      <main className="flex min-h-full flex-1 xl:px-16 2xl:px-32 ">
-      <Sidebar selected={null} />
-        <section className="flex flex-col flex-1 md:border-x-1 border-gray-400">
+      <main className="flex min-h-full flex-1 xl:px-16 2xl:px-32">
+        <Sidebar selected={null} />
+        <section className="flex flex-1 flex-col border-gray-400 md:border-x-1">
           <div className="flex items-center gap-2 px-4 py-2 text-xl font-bold text-sky-950">
             <Link to="/" className="rounded-full p-2 hover:bg-gray-200">
               <ArrowLeftIcon className="h-5 w-5" />
@@ -228,6 +229,7 @@ const Post = () => {
         </section>
         <RightSideBar />
       </main>
+      <Footer />
     </>
   );
 };
