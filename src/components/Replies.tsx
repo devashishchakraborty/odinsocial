@@ -35,7 +35,11 @@ const Replies = ({
   useEffect(() => {
     const fetchReplies = async () => {
       if (!showReplies) return;
-      if (replies) return;
+
+      if (newReplies && replies) {
+        setReplies((prev) => [...prev!, ...newReplies]);
+        setNewReplies(null);
+      }
 
       try {
         const headers = await getAuthHeaders();
@@ -106,14 +110,14 @@ const Replies = ({
       {repliesCount > 0 && (
         <div
           className="cursor-pointer px-4 text-sm font-bold text-gray-600 hover:text-gray-700"
-          onClick={() => setShowReplies(!showReplies)}
+          onClick={() => setShowReplies((prev) => !prev)}
         >
-          {showReplies ? "Hide" : `View ${repliesCount}`} Replies
+          {showReplies ? "Hide" : `View ${replies ? replies.length : repliesCount}`} Replies
         </div>
       )}
 
       {showReplyForm && (
-        <section className=" text-sm flex gap-2 px-4 pt-2 pb-4 w-full">
+        <section className="flex w-full gap-2 px-4 pt-2 pb-4 text-sm">
           <form
             action="#"
             className="relative flex flex-1 flex-col"
@@ -122,7 +126,7 @@ const Replies = ({
             <textarea
               name="reply"
               id="reply"
-              className="field-sizing-content flex-1 w-full resize-none rounded-2xl p-2 pb-12 outline-2 outline-gray-300 focus:outline-gray-400"
+              className="field-sizing-content w-full flex-1 resize-none rounded-2xl p-2 pb-12 outline-2 outline-gray-300 focus:outline-gray-400"
               placeholder="Add your reply"
               value={newReply}
               onChange={(e) =>
@@ -160,7 +164,7 @@ const Replies = ({
       {showReplies ? (
         replies ? (
           replies.map((reply: ReplyType) => (
-            <Reply reply={reply} setReplies={setReplies} key={reply.id}/>
+            <Reply reply={reply} setReplies={setReplies} key={reply.id} />
           ))
         ) : (
           <SmallLoader />
