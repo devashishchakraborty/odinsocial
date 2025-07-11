@@ -131,6 +131,11 @@ const Login = () => {
               </Link>
             </div>
             <small>
+              <i className="text-red-700">
+                Note: Backend Server would take around 40 seconds to start.
+              </i>
+            </small>
+            <small>
               <i className="text-red-700">{loginError}</i>
             </small>
           </form>
